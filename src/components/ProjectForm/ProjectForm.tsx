@@ -22,15 +22,31 @@ export default function ProjectForm() {
       name: (value) =>
         projectsContext?.projects.find((p) => p.name === value.trim()) ===
         undefined,
+      url: (value) => {
+        if (value.trim() === "") {
+          return true;
+        }
+        // https://stackoverflow.com/questions/5717093/check-if-a-javascript-string-is-a-url
+        let url;
+
+        try {
+          url = new URL(value);
+        } catch (_) {
+          return false;
+        }
+
+        return url.protocol === "https:" && url.hostname === "github.com";
+      },
     },
     errorMessages: {
       name: "Project with this name already exists",
+      url: "Invalid GitHub URL",
     },
   });
 
   return (
     <Paper shadow={"sm"} padding={"sm"} m={"sm"}>
-      <form>
+      <form onSubmit={form.onSubmit((values) => console.log(values))}>
         <TextInput
           label={"Project Name"}
           icon={<LetterCaseCapitalizeIcon />}
@@ -63,7 +79,7 @@ export default function ProjectForm() {
           {...form.getInputProps("url")}
         />
         <Group mt={"sm"} position="right">
-          <Button>Submit</Button>
+          <Button type={"submit"}>Submit</Button>
         </Group>
       </form>
     </Paper>
