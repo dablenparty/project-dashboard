@@ -2,7 +2,9 @@ import { useLocalStorageValue } from "@mantine/hooks";
 import { createContext, useContext, useMemo, useState } from "react";
 import Project from "src/models/Project";
 
-const ProjectsContext = createContext<ProjectsContextInterface | undefined>(undefined);
+const ProjectsContext = createContext<ProjectsContextInterface | undefined>(
+  undefined
+);
 
 interface ProjectsContextInterface {
   projects: Project[];
@@ -70,5 +72,9 @@ export const ProjectsProvider = ({ children }: ProjectsProviderProps) => {
     };
   }, [projects]);
 
-  return <ProjectsContext.Provider value={value}>{children}</ProjectsContext.Provider>;
-}
+  return (
+    <ProjectsContext.Provider value={value}>
+      {children}
+    </ProjectsContext.Provider>
+  );
+};
