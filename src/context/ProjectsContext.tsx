@@ -37,8 +37,9 @@ export const ProjectsProvider = ({ children }: ProjectsProviderProps) => {
    * @param project Project to add to the list of projects
    */
   function addProject(project: Project) {
-    setProjects([...projects, project]);
-    setLocalProjects(JSON.stringify(projects));
+    const newProjects = [...projects, project];
+    setProjects(newProjects);
+    setLocalProjects(JSON.stringify(newProjects));
   }
 
   /**
@@ -48,7 +49,7 @@ export const ProjectsProvider = ({ children }: ProjectsProviderProps) => {
   function deleteProject(projectId: string) {
     const filtered = projects.filter((p) => p.id !== projectId);
     setProjects(filtered);
-    setLocalProjects(JSON.stringify(projects));
+    setLocalProjects(JSON.stringify(filtered));
   }
 
   /**
@@ -60,7 +61,7 @@ export const ProjectsProvider = ({ children }: ProjectsProviderProps) => {
     const edited = [...projects];
     edited[projectIndex] = project;
     setProjects(edited);
-    setLocalProjects(JSON.stringify(projects));
+    setLocalProjects(JSON.stringify(edited));
   }
 
   const value = useMemo(() => {
