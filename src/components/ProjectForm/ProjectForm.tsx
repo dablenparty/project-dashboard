@@ -1,4 +1,4 @@
-import { Button, Group, Paper, Textarea, TextInput } from "@mantine/core";
+import { Button, Group, Paper, TextInput, Title } from "@mantine/core";
 import { useForm } from "@mantine/hooks";
 import {
   ArchiveIcon,
@@ -8,10 +8,27 @@ import {
 } from "@radix-ui/react-icons";
 import { useProjects } from "src/context/ProjectsContext";
 
-export default function ProjectForm() {
+interface ProjectFormProps {
+  onSubmit: (values: ProjectFormState) => void;
+  title: string;
+  buttonText?: string;
+}
+
+interface ProjectFormState {
+  name: string;
+  description: string;
+  rootDir: string;
+  url: string;
+}
+
+export default function ProjectForm({
+  onSubmit,
+  buttonText,
+  title,
+}: ProjectFormProps) {
   const projectsContext = useProjects();
 
-  const form = useForm({
+  const form = useForm<ProjectFormState>({
     initialValues: {
       name: "",
       description: "",
@@ -44,9 +61,15 @@ export default function ProjectForm() {
     },
   });
 
+  function handleSubmit(values: ProjectFormState) {
+    onSubmit(values);
+    form.reset();
+  }
+
   return (
     <Paper shadow={"sm"} padding={"sm"} m={"sm"}>
-      <form onSubmit={form.onSubmit((values) => console.log(values))}>
+      <Title>{title}</Title>
+      <form onSubmit={form.onSubmit(handleSubmit)}>
         <TextInput
           label={"Project Name"}
           icon={<LetterCaseCapitalizeIcon />}
@@ -79,7 +102,7 @@ export default function ProjectForm() {
           {...form.getInputProps("url")}
         />
         <Group mt={"sm"} position="right">
-          <Button type={"submit"}>Submit</Button>
+          <Button type={"submit"}>{buttonText || "Submit"}</Button>
         </Group>
       </form>
     </Paper>
