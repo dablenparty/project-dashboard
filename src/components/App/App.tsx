@@ -13,7 +13,6 @@ import {
   Modal,
   Button,
 } from "@mantine/core";
-import "./App.css";
 import { useState } from "react";
 import { GitHubLogoIcon, PlusIcon } from "@radix-ui/react-icons";
 import ProjectForm from "src/components/ProjectForm";
