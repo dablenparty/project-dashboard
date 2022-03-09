@@ -1,35 +1,50 @@
-import { Card, Center } from "@mantine/core";
-import ProjectForm from "src/components/ProjectForm";
-import { useProjects } from "src/context/ProjectsContext";
-import Project from "src/models/Project";
+import {
+  AppShell,
+  Text,
+  Navbar,
+  Header,
+  MediaQuery,
+  Burger,
+} from "@mantine/core";
 import "./App.css";
-import { v4 as uuidv4 } from "uuid";
+import { useState } from "react";
 
 function App() {
-  const projectsContext = useProjects();
+  const [opened, setOpened] = useState(false);
   return (
-    <>
-      <Center>
-        <h1>Hello, with Mantine!</h1>
-      </Center>
-      <ProjectForm
-        title="Add Project"
-        buttonText="Add"
-        onSubmit={(values) => {
-          const project: Project = {
-            id: uuidv4(),
-            ...values,
-          };
-          projectsContext?.addProject(project);
-        }}
-      />
-      {projectsContext?.projects.map((project) => (
-        <Card>
-          <h2>{project.name}</h2>
-          <p>{project.description}</p>
-        </Card>
-      ))}
-    </>
+    <AppShell
+      navbarOffsetBreakpoint={"sm"}
+      fixed
+      navbar={
+        <Navbar
+          padding={"sm"}
+          hiddenBreakpoint={"sm"}
+          hidden={!opened}
+          width={{ sm: 300, lg: 400 }}
+        >
+          <Text>Navbar</Text>
+        </Navbar>
+      }
+      header={
+        <Header height={70} padding={"md"}>
+          <div
+            style={{ display: "flex", alignItems: "center", height: "100%" }}
+          >
+            <MediaQuery largerThan={"sm"} styles={{ display: "none" }}>
+              <Burger
+                opened={opened}
+                onClick={() => setOpened((o) => !o)}
+                size={"sm"}
+                mr={"xl"}
+              />
+            </MediaQuery>
+            <Text>Application header</Text>
+          </div>
+        </Header>
+      }
+    >
+      <Text>GOD HELP ME PLEASE</Text>
+    </AppShell>
   );
 }
 
