@@ -39,7 +39,7 @@ function App() {
           width={{ sm: 300, lg: 400 }}
         >
           <Navbar.Section grow component={ScrollArea}>
-            {projectsContext?.projects.map((project, index) => (
+            {projectsContext?.projects.map((project) => (
               <UnstyledButton
                 key={project.id}
                 sx={{
