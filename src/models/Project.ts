@@ -3,5 +3,5 @@ export default interface Project {
     name: string;
     description: string;
     rootDir: string;
-    url?: string;
+    url: string;
 }
