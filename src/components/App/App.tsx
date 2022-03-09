@@ -10,15 +10,21 @@ import {
   ScrollArea,
   UnstyledButton,
   useMantineTheme,
+  Modal,
 } from "@mantine/core";
 import "./App.css";
 import { useState } from "react";
-import { MixIcon, PlusIcon } from "@radix-ui/react-icons";
+import { PlusIcon } from "@radix-ui/react-icons";
+import ProjectForm from "src/components/ProjectForm";
+import { useProjects } from "src/context/ProjectsContext";
+import { v4 as uuidv4 } from "uuid";
 
 function App() {
-  const [opened, setOpened] = useState(false);
+  const [navbarOpened, setNavbarOpened] = useState(false);
+  const [modalOpened, setModalOpened] = useState(false);
   const [projectIndex, setProjectIndex] = useState(0);
   const theme = useMantineTheme();
+  const projectsContext = useProjects();
   return (
     <AppShell
       navbarOffsetBreakpoint={"sm"}
@@ -27,28 +33,24 @@ function App() {
         <Navbar
           padding={"sm"}
           hiddenBreakpoint={"sm"}
-          hidden={!opened}
+          hidden={!navbarOpened}
           width={{ sm: 300, lg: 400 }}
         >
           <Navbar.Section grow component={ScrollArea}>
-            {Array(10)
-              .fill("Navbar element")
-              .map((element, index) => (
-                <UnstyledButton
-                  key={index}
-                  sx={{
-                    width: "100%",
-                    padding: 10,
-                    borderRadius: 4,
-                    ":hover": { backgroundColor: theme.colors.gray[1] },
-                  }}
-                  onClick={() => setProjectIndex(index)}
-                >
-                  <Text>
-                    {element} {index}
-                  </Text>
-                </UnstyledButton>
-              ))}
+            {projectsContext?.projects.map((project, index) => (
+              <UnstyledButton
+                key={project.id}
+                sx={{
+                  width: "100%",
+                  padding: 10,
+                  borderRadius: 4,
+                  ":hover": { backgroundColor: theme.colors.gray[1] },
+                }}
+                onClick={() => setProjectIndex(index)}
+              >
+                <Text>{project.name}</Text>
+              </UnstyledButton>
+            ))}
           </Navbar.Section>
         </Navbar>
       }
@@ -61,15 +63,29 @@ function App() {
             <Group>
               <MediaQuery largerThan={"sm"} styles={{ display: "none" }}>
                 <Burger
-                  opened={opened}
-                  onClick={() => setOpened((o) => !o)}
+                  opened={navbarOpened}
+                  onClick={() => setNavbarOpened((o) => !o)}
                   size={"sm"}
                   mr={"xl"}
                 />
               </MediaQuery>
               <Text>Application header</Text>
             </Group>
-            <ActionIcon>
+            <Modal
+              opened={modalOpened}
+              onClose={() => setModalOpened(false)}
+              title={"Add a project"}
+            >
+              <ProjectForm
+                onSubmit={(values) => {
+                  const newProject = { id: uuidv4(), ...values };
+                  projectsContext?.addProject(newProject);
+                  setModalOpened(false);
+                }}
+                title={""}
+              />
+            </Modal>
+            <ActionIcon onClick={() => setModalOpened(true)}>
               <PlusIcon />
             </ActionIcon>
           </Group>
