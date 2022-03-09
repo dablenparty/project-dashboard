@@ -7,13 +7,18 @@ import {
   Burger,
   Group,
   ActionIcon,
+  ScrollArea,
+  UnstyledButton,
+  useMantineTheme,
 } from "@mantine/core";
 import "./App.css";
 import { useState } from "react";
-import { PlusIcon } from "@radix-ui/react-icons";
+import { MixIcon, PlusIcon } from "@radix-ui/react-icons";
 
 function App() {
   const [opened, setOpened] = useState(false);
+  const [projectIndex, setProjectIndex] = useState(0);
+  const theme = useMantineTheme();
   return (
     <AppShell
       navbarOffsetBreakpoint={"sm"}
@@ -25,7 +30,26 @@ function App() {
           hidden={!opened}
           width={{ sm: 300, lg: 400 }}
         >
-          <Text>Navbar</Text>
+          <Navbar.Section grow component={ScrollArea}>
+            {Array(10)
+              .fill("Navbar element")
+              .map((element, index) => (
+                <UnstyledButton
+                  key={index}
+                  sx={{
+                    width: "100%",
+                    padding: 10,
+                    borderRadius: 4,
+                    ":hover": { backgroundColor: theme.colors.gray[1] },
+                  }}
+                  onClick={() => setProjectIndex(index)}
+                >
+                  <Text>
+                    {element} {index}
+                  </Text>
+                </UnstyledButton>
+              ))}
+          </Navbar.Section>
         </Navbar>
       }
       header={
@@ -52,7 +76,7 @@ function App() {
         </Header>
       }
     >
-      <Text>GOD HELP ME PLEASE</Text>
+      <Text>Selected index: {projectIndex}</Text>
     </AppShell>
   );
 }
