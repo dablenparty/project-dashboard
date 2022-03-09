@@ -11,10 +11,11 @@ import {
   UnstyledButton,
   useMantineTheme,
   Modal,
+  Button,
 } from "@mantine/core";
 import "./App.css";
 import { useState } from "react";
-import { PlusIcon } from "@radix-ui/react-icons";
+import { GitHubLogoIcon, PlusIcon } from "@radix-ui/react-icons";
 import ProjectForm from "src/components/ProjectForm";
 import { useProjects } from "src/context/ProjectsContext";
 import { v4 as uuidv4 } from "uuid";
@@ -22,9 +23,11 @@ import { v4 as uuidv4 } from "uuid";
 function App() {
   const [navbarOpened, setNavbarOpened] = useState(false);
   const [modalOpened, setModalOpened] = useState(false);
-  const [projectIndex, setProjectIndex] = useState(0);
   const theme = useMantineTheme();
   const projectsContext = useProjects();
+  const [selectedProject, setSelectedProject] = useState(
+    projectsContext?.projects[0]
+  );
   return (
     <AppShell
       navbarOffsetBreakpoint={"sm"}
@@ -47,7 +50,7 @@ function App() {
                   ":hover": { backgroundColor: theme.colors.gray[1] },
                 }}
                 onClick={() => {
-                  setProjectIndex(index);
+                  setSelectedProject(project);
                   setNavbarOpened(false);
                 }}
               >
@@ -75,7 +78,7 @@ function App() {
                   mr={"xl"}
                 />
               </MediaQuery>
-              <Text>Application header</Text>
+              <Text>Dashboard</Text>
             </Group>
             <Modal
               opened={modalOpened}
@@ -98,7 +101,30 @@ function App() {
         </Header>
       }
     >
-      <Text>Selected index: {projectIndex}</Text>
+      {selectedProject && (
+        <>
+          <Group position="apart">
+            <Text weight={"bold"} size={"xl"}>
+              {selectedProject.name}
+            </Text>
+            {selectedProject.url && (
+              <Button
+                component="a"
+                href={selectedProject.url}
+                target="_blank"
+                variant={"subtle"}
+                color={"gray"}
+                leftIcon={<GitHubLogoIcon />}
+              >
+                View on GitHub
+              </Button>
+            )}
+          </Group>
+          <Text size={"sm"} color={theme.colors.gray[6]}>
+            {selectedProject.rootDir}
+          </Text>
+        </>
+      )}
     </AppShell>
   );
 }
