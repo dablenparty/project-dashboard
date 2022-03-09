@@ -7,11 +7,13 @@ import {
   QuestionMarkIcon,
 } from "@radix-ui/react-icons";
 import { useProjects } from "src/context/ProjectsContext";
+import Project from "src/models/Project";
 
 interface ProjectFormProps {
   onSubmit: (values: ProjectFormState) => void;
   title: string;
   buttonText?: string;
+  project?: Project;
 }
 
 interface ProjectFormState {
@@ -25,12 +27,13 @@ export default function ProjectForm({
   onSubmit,
   buttonText,
   title,
+  project,
 }: ProjectFormProps) {
   const projectsContext = useProjects();
 
   const form = useForm<ProjectFormState>({
-    initialValues: {
-      name: "",
+    initialValues: project ?? {
+      name: `Project ${projectsContext?.projects.length ?? 0}`,
       description: "",
       rootDir: "",
       url: "",
