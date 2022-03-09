@@ -13,3 +13,5 @@ stats.html
 
 # VS Code
 .vscode/
+
+out/
