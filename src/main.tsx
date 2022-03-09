@@ -4,13 +4,16 @@ import "./index.css";
 import App from "./components/App";
 import { MantineProvider } from "@mantine/core";
 import { ProjectsProvider } from "src/context/ProjectsContext";
+import { ModalsProvider } from "@mantine/modals";
 
 ReactDOM.render(
   <React.StrictMode>
     <MantineProvider withGlobalStyles>
-      <ProjectsProvider>
-        <App />
-      </ProjectsProvider>
+      <ModalsProvider>
+        <ProjectsProvider>
+          <App />
+        </ProjectsProvider>
+      </ModalsProvider>
     </MantineProvider>
   </React.StrictMode>,
   document.getElementById("root")
