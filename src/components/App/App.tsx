@@ -5,9 +5,12 @@ import {
   Header,
   MediaQuery,
   Burger,
+  Group,
+  ActionIcon,
 } from "@mantine/core";
 import "./App.css";
 import { useState } from "react";
+import { PlusIcon } from "@radix-ui/react-icons";
 
 function App() {
   const [opened, setOpened] = useState(false);
@@ -27,19 +30,25 @@ function App() {
       }
       header={
         <Header height={70} padding={"md"}>
-          <div
-            style={{ display: "flex", alignItems: "center", height: "100%" }}
+          <Group
+            position="apart"
+            sx={{ display: "flex", alignItems: "center", height: "100%" }}
           >
-            <MediaQuery largerThan={"sm"} styles={{ display: "none" }}>
-              <Burger
-                opened={opened}
-                onClick={() => setOpened((o) => !o)}
-                size={"sm"}
-                mr={"xl"}
-              />
-            </MediaQuery>
-            <Text>Application header</Text>
-          </div>
+            <Group>
+              <MediaQuery largerThan={"sm"} styles={{ display: "none" }}>
+                <Burger
+                  opened={opened}
+                  onClick={() => setOpened((o) => !o)}
+                  size={"sm"}
+                  mr={"xl"}
+                />
+              </MediaQuery>
+              <Text>Application header</Text>
+            </Group>
+            <ActionIcon>
+              <PlusIcon />
+            </ActionIcon>
+          </Group>
         </Header>
       }
     >
