@@ -46,9 +46,15 @@ function App() {
                   borderRadius: 4,
                   ":hover": { backgroundColor: theme.colors.gray[1] },
                 }}
-                onClick={() => setProjectIndex(index)}
+                onClick={() => {
+                  setProjectIndex(index);
+                  setNavbarOpened(false);
+                }}
               >
                 <Text>{project.name}</Text>
+                <Text size={"sm"} color={theme.colors.gray[6]}>
+                  {project.description}
+                </Text>
               </UnstyledButton>
             ))}
           </Navbar.Section>
