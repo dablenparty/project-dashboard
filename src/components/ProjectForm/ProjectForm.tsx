@@ -11,7 +11,6 @@ import Project from "src/models/Project";
 
 interface ProjectFormProps {
   onSubmit: (values: ProjectFormState) => void;
-  title: string;
   buttonText?: string;
   project?: Project;
 }
@@ -26,7 +25,6 @@ interface ProjectFormState {
 export default function ProjectForm({
   onSubmit,
   buttonText,
-  title,
   project,
 }: ProjectFormProps) {
   const projectsContext = useProjects();
@@ -70,8 +68,7 @@ export default function ProjectForm({
   }
 
   return (
-    <Paper shadow={"sm"} padding={"sm"} m={"sm"}>
-      <Title>{title}</Title>
+    <Paper>
       <form onSubmit={form.onSubmit(handleSubmit)}>
         <TextInput
           label={"Project Name"}
@@ -104,7 +101,7 @@ export default function ProjectForm({
           placeholder={"Is this project on GitHub?"}
           {...form.getInputProps("url")}
         />
-        <Group mt={"sm"} position="right">
+        <Group mt={"lg"} position={"right"}>
           <Button type={"submit"}>{buttonText || "Submit"}</Button>
         </Group>
       </form>

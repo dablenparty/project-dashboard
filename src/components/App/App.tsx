@@ -10,7 +10,6 @@ import {
   ScrollArea,
   UnstyledButton,
   useMantineTheme,
-  Modal,
   Button,
 } from "@mantine/core";
 import { useState } from "react";
@@ -18,15 +17,32 @@ import { GitHubLogoIcon, MinusIcon, PlusIcon } from "@radix-ui/react-icons";
 import ProjectForm from "src/components/ProjectForm";
 import { useProjects } from "src/context/ProjectsContext";
 import { v4 as uuidv4 } from "uuid";
+import { useModals } from "@mantine/modals";
 
 function App() {
   const [navbarOpened, setNavbarOpened] = useState(false);
-  const [modalOpened, setModalOpened] = useState(false);
+  const modals = useModals();
   const theme = useMantineTheme();
   const projectsContext = useProjects();
   const [selectedProject, setSelectedProject] = useState(
     projectsContext?.projects[0]
   );
+
+  const openProjectFormModal = () => {
+    const modalId = modals.openModal({
+      title: "Add a project",
+      children: (
+        <ProjectForm
+          onSubmit={(values) => {
+            const newProject = { id: uuidv4(), ...values };
+            projectsContext?.addProject(newProject);
+            modals.closeModal(modalId);
+          }}
+        />
+      ),
+    });
+  };
+
   return (
     <AppShell
       navbarOffsetBreakpoint={"sm"}
@@ -87,21 +103,7 @@ function App() {
               </MediaQuery>
               <Text>Dashboard</Text>
             </Group>
-            <Modal
-              opened={modalOpened}
-              onClose={() => setModalOpened(false)}
-              title={"Add a project"}
-            >
-              <ProjectForm
-                onSubmit={(values) => {
-                  const newProject = { id: uuidv4(), ...values };
-                  projectsContext?.addProject(newProject);
-                  setModalOpened(false);
-                }}
-                title={""}
-              />
-            </Modal>
-            <ActionIcon onClick={() => setModalOpened(true)}>
+            <ActionIcon onClick={openProjectFormModal}>
               <PlusIcon />
             </ActionIcon>
           </Group>
