@@ -14,7 +14,7 @@ import {
   Button,
 } from "@mantine/core";
 import { useState } from "react";
-import { GitHubLogoIcon, PlusIcon } from "@radix-ui/react-icons";
+import { GitHubLogoIcon, MinusIcon, PlusIcon } from "@radix-ui/react-icons";
 import ProjectForm from "src/components/ProjectForm";
 import { useProjects } from "src/context/ProjectsContext";
 import { v4 as uuidv4 } from "uuid";
@@ -53,7 +53,15 @@ function App() {
                   setNavbarOpened(false);
                 }}
               >
-                <Text>{project.name}</Text>
+                <Group position="apart">
+                  <Text>{project.name}</Text>
+                  <ActionIcon
+                    color={"red"}
+                    onClick={() => projectsContext?.deleteProject(project.id)}
+                  >
+                    <MinusIcon />
+                  </ActionIcon>
+                </Group>
                 <Text size={"sm"} color={theme.colors.gray[6]}>
                   {project.description}
                 </Text>
