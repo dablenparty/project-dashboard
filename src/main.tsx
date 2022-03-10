@@ -3,7 +3,7 @@ import ReactDOM from "react-dom";
 import "./index.css";
 import App from "./components/App";
 import { MantineProvider } from "@mantine/core";
-import { ProjectsProvider } from "src/context/ProjectsContext";
+import { ProjectsProvider } from "./context/ProjectsContext";
 import { ModalsProvider } from "@mantine/modals";
 
 ReactDOM.render(

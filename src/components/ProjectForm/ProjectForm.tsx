@@ -1,4 +1,4 @@
-import { Button, Group, Paper, TextInput, Title } from "@mantine/core";
+import { Button, Group, Paper, TextInput } from "@mantine/core";
 import { useForm } from "@mantine/hooks";
 import {
   ArchiveIcon,
@@ -6,8 +6,8 @@ import {
   LetterCaseCapitalizeIcon,
   QuestionMarkIcon,
 } from "@radix-ui/react-icons";
-import { useProjects } from "src/context/ProjectsContext";
-import Project from "src/models/Project";
+import { useProjects } from "@context/ProjectsContext";
+import Project from "@models/Project";
 
 interface ProjectFormProps {
   onSubmit: (values: ProjectFormState) => void;

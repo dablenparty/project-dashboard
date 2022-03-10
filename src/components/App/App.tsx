@@ -14,8 +14,8 @@ import {
 } from "@mantine/core";
 import { useState } from "react";
 import { GitHubLogoIcon, MinusIcon, PlusIcon } from "@radix-ui/react-icons";
-import ProjectForm from "src/components/ProjectForm";
-import { useProjects } from "src/context/ProjectsContext";
+import ProjectForm from "@components/ProjectForm";
+import { useProjects } from "@context/ProjectsContext";
 import { v4 as uuidv4 } from "uuid";
 import { useModals } from "@mantine/modals";
 

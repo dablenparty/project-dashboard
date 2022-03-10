@@ -1,6 +1,6 @@
 import { useLocalStorageValue } from "@mantine/hooks";
 import { createContext, useContext, useMemo, useState } from "react";
-import Project from "src/models/Project";
+import Project from "@models/Project";
 
 const ProjectsContext = createContext<ProjectsContextInterface | undefined>(
   undefined
