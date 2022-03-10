@@ -45,12 +45,16 @@
           {
             "mainConfig": "./webpack.main.config.js",
             "renderer": {
+              "nodeIntegration": true,
               "config": "./webpack.renderer.config.js",
               "entryPoints": [
                 {
                   "html": "./src/index.html",
                   "js": "./src/render.ts",
-                  "name": "main_window"
+                  "name": "main_window",
+                  "preload": {
+                    "js": "./src/preload.ts"
+                  }
                 }
               ]
             }
