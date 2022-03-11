@@ -58,7 +58,7 @@ function App() {
         >
           <Navbar.Section grow component={ScrollArea}>
             <TextInput
-              placeholder="Search for a project"
+              placeholder={"Search for a project"}
               value={projectSearchText}
               onChange={(event) => setProjectSearchText(event.target.value)}
               type={"search"}
@@ -98,7 +98,7 @@ function App() {
       header={
         <Header height={70} padding={"md"}>
           <Group
-            position="apart"
+            position={"apart"}
             sx={{ display: "flex", alignItems: "center", height: "100%" }}
           >
             <Group>
@@ -121,15 +121,15 @@ function App() {
     >
       {selectedProject && (
         <>
-          <Group position="apart">
+          <Group position={"apart"}>
             <Text weight={"bold"} size={"xl"}>
               {selectedProject.name}
             </Text>
             {selectedProject.url && (
               <Button
-                component="a"
+                component={"a"}
                 href={selectedProject.url}
-                target="_blank"
+                target={"_blank"}
                 variant={"subtle"}
                 color={"gray"}
                 leftIcon={<GitHubLogoIcon />}
