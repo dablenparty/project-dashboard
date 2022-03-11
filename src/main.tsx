@@ -9,11 +9,11 @@ import { ModalsProvider } from "@mantine/modals";
 render(
   <React.StrictMode>
     <MantineProvider withGlobalStyles>
-      <ModalsProvider>
-        <ProjectsProvider>
+      <ProjectsProvider>
+        <ModalsProvider>
           <App />
-        </ProjectsProvider>
-      </ModalsProvider>
+        </ModalsProvider>
+      </ProjectsProvider>
     </MantineProvider>
   </React.StrictMode>,
   document.getElementById("root")
