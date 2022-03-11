@@ -1,5 +1,4 @@
-import { useLocalStorageValue } from "@mantine/hooks";
-import { createContext, useContext, useMemo, useState } from "react";
+import { createContext, useContext, useEffect, useMemo, useState } from "react";
 import Project from "@models/Project";
 import { ipcRenderer } from "electron";
 
@@ -25,7 +24,19 @@ interface ProjectsProviderProps {
 export const ProjectsProvider = ({ children }: ProjectsProviderProps) => {
   const [projects, setProjects] = useState<Project[]>([]);
 
-  // TODO load from electron ipc
+  // load the projects when the component is loaded
+  useEffect(() => {
+    ipcRenderer.invoke("loadProjects").then((projects: Project[]) => {
+      setProjects(projects);
+    });
+  }, []);
+
+  // save the projects whenever they're updated
+  useEffect(() => {
+    ipcRenderer.invoke("saveProjects", projects).then(() => {
+      console.log("projects saved");
+    });
+  }, [projects]);
 
   /**
    * Adds a project to the list of projects
@@ -35,9 +46,6 @@ export const ProjectsProvider = ({ children }: ProjectsProviderProps) => {
   function addProject(project: Project) {
     const newProjects = [...projects, project];
     setProjects(newProjects);
-    ipcRenderer
-      .invoke("saveProjects", newProjects)
-      .then(() => console.log("projects saved"));
   }
 
   /**
@@ -47,9 +55,6 @@ export const ProjectsProvider = ({ children }: ProjectsProviderProps) => {
   function deleteProject(projectId: string) {
     const filtered = projects.filter((p) => p.id !== projectId);
     setProjects(filtered);
-    ipcRenderer
-      .invoke("saveProjects", filtered)
-      .then(() => console.log("projects saved"));
   }
 
   /**
@@ -61,9 +66,6 @@ export const ProjectsProvider = ({ children }: ProjectsProviderProps) => {
     const edited = [...projects];
     edited[projectIndex] = project;
     setProjects(edited);
-    ipcRenderer
-      .invoke("saveProjects", edited)
-      .then(() => console.log("projects saved"));
   }
 
   const value = useMemo(() => {
