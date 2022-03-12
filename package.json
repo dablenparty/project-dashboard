@@ -9,7 +9,8 @@
     "package": "electron-forge package",
     "make": "electron-forge make",
     "publish": "electron-forge publish",
-    "lint": "eslint --ext .ts,.tsx ."
+    "lint": "eslint --ext .ts,.tsx .",
+    "format": "prettier --write \"src/**/*.{js,jsx,ts,tsx,html,css}\""
   },
   "keywords": [],
   "author": "dablenparty",
@@ -84,6 +85,7 @@
     "eslint-plugin-import": "^2.25.4",
     "fork-ts-checker-webpack-plugin": "^6.5.0",
     "node-loader": "^2.0.0",
+    "prettier": "^2.5.1",
     "style-loader": "^3.3.1",
     "ts-loader": "^9.2.7",
     "tsconfig-paths-webpack-plugin": "^3.5.2",
