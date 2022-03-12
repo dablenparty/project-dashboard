@@ -38,6 +38,7 @@ function App() {
           onSubmit={(values) => {
             const newProject = { id: uuidv4(), ...values };
             projectsContext?.addProject(newProject);
+            setSelectedProject(newProject);
             modals.closeModal(modalId);
           }}
         />
@@ -119,7 +120,8 @@ function App() {
         </Header>
       }
     >
-      {selectedProject && (
+      {selectedProject &&
+      projectsContext?.projects.find((p) => p.id === selectedProject.id) ? (
         <>
           <Group position={"apart"}>
             <Text weight={"bold"} size={"xl"}>
@@ -142,6 +144,8 @@ function App() {
             {selectedProject.rootDir}
           </Text>
         </>
+      ) : (
+        <Text color={"dimmed"}>No project selected</Text>
       )}
     </AppShell>
   );
