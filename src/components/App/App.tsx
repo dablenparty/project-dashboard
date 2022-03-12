@@ -49,6 +49,7 @@ function App() {
       setReadmeRaw(entry.rawText);
       return;
     }
+    // TODO: set loading until the readme is loaded
     // otherwise, fetch the README text from the folder
     ipcRenderer.invoke("getReadme", selectedProject.rootDir).then((readme) => {
       const readmeText = readme ?? "No README.md found";
