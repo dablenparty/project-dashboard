@@ -13,12 +13,12 @@ export default function useLimitedArray<T>(
   initialValue: T[],
   maxLength: number
 ): {
-  items: T[];
+  array: T[];
   addItem: (item: T) => void;
   removeItem: (item: T) => T | undefined;
   clear: () => void;
 } {
-  const [items, setItems] = useState(initialValue);
+  const [array, setArray] = useState(initialValue);
 
   /**
    * Adds an item to the head of the limited array.
@@ -28,8 +28,8 @@ export default function useLimitedArray<T>(
    */
   const addItem = (item: T) => {
     const newItems =
-      items.length >= maxLength ? [item, ...items.slice(1)] : [item, ...items];
-    setItems(newItems);
+      array.length >= maxLength ? [item, ...array.slice(1)] : [item, ...array];
+    setArray(newItems);
   };
 
   /**
@@ -40,15 +40,15 @@ export default function useLimitedArray<T>(
    */
   const removeItem = (item: T) => {
     let removed: T | undefined;
-    const newItems = items.filter((i) => i !== item && (removed = i));
-    setItems(newItems);
+    const newItems = array.filter((i) => i !== item && (removed = i));
+    setArray(newItems);
     return removed;
   };
 
   /**
    * Clears the array.
    */
-  const clear = () => setItems([]);
+  const clear = () => setArray([]);
 
-  return { items, addItem, removeItem, clear };
+  return { array, addItem, removeItem, clear };
 }
