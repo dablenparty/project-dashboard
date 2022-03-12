@@ -12,6 +12,7 @@ import {
   useMantineTheme,
   Button,
   TextInput,
+  Anchor,
 } from "@mantine/core";
 import { useState } from "react";
 import { GitHubLogoIcon, PlusIcon } from "@radix-ui/react-icons";
@@ -19,6 +20,7 @@ import ProjectForm from "@components/ProjectForm";
 import { useProjects } from "@context/ProjectsContext";
 import { v4 as uuidv4 } from "uuid";
 import { useModals } from "@mantine/modals";
+import { ipcRenderer } from "electron";
 
 function App() {
   const [navbarOpened, setNavbarOpened] = useState(false);
@@ -137,11 +139,16 @@ function App() {
               </Button>
             )}
           </Group>
-          <Text size={"sm"} color={"dimmed"}>
+          <Anchor
+            onClick={async () =>
+              ipcRenderer.invoke("openPath", selectedProject.rootDir)
+            }
+            size={"sm"}
+            color={"dimmed"}
+          >
             {selectedProject.rootDir}
-          </Text>
-          <br />
-          <Text size={"sm"} color={"dimmed"}>
+          </Anchor>
+          <Text mt={"md"} size={"sm"} color={"dimmed"}>
             Description
           </Text>
           <Text>{selectedProject.description}</Text>
