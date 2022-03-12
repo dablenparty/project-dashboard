@@ -140,9 +140,14 @@ function App() {
               </Button>
             )}
           </Group>
-          <Text size={"sm"} color={theme.colors.gray[6]}>
+          <Text size={"sm"} color={"dimmed"}>
             {selectedProject.rootDir}
           </Text>
+          <br />
+          <Text size={"sm"} color={"dimmed"}>
+            Description
+          </Text>
+          <Text>{selectedProject.description}</Text>
         </>
       ) : (
         <Text color={"dimmed"}>No project selected</Text>
