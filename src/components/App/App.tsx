@@ -194,7 +194,11 @@ function App() {
             Description
           </Text>
           <Text>{selectedProject.description}</Text>
-          <ReactMarkdown>{readmeRaw}</ReactMarkdown>
+          <ReactMarkdown
+            components={{ a: (props) => <a target={"_blank"} {...props} /> }}
+          >
+            {readmeRaw}
+          </ReactMarkdown>
         </>
       ) : (
         <Text color={"dimmed"}>No project selected</Text>
