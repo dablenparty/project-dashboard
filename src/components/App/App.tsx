@@ -25,13 +25,13 @@ import ReactMarkdown from "react-markdown";
 import { useDidUpdate } from "@mantine/hooks";
 
 function App() {
-  const [navbarOpened, setNavbarOpened] = useState(false);
-  const [projectSearchText, setProjectSearchText] = useState("");
   const modals = useModals();
   const theme = useMantineTheme();
   const { projects, addProject } = useProjects();
-  const [selectedProject, setSelectedProject] = useState(projects[0]);
   const [readmeRaw, setReadmeRaw] = useState("");
+  const [navbarOpened, setNavbarOpened] = useState(false);
+  const [projectSearchText, setProjectSearchText] = useState("");
+  const [selectedProject, setSelectedProject] = useState(projects[0]);
 
   // This hook makes sure the function is only run once when the component is mounted
   useDidUpdate(() => {
