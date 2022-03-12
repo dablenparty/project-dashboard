@@ -11,16 +11,18 @@ import {
   UnstyledButton,
   useMantineTheme,
   Button,
+  TextInput,
 } from "@mantine/core";
 import { useState } from "react";
-import { GitHubLogoIcon, MinusIcon, PlusIcon } from "@radix-ui/react-icons";
-import ProjectForm from "src/components/ProjectForm";
-import { useProjects } from "src/context/ProjectsContext";
+import { GitHubLogoIcon, PlusIcon } from "@radix-ui/react-icons";
+import ProjectForm from "@components/ProjectForm";
+import { useProjects } from "@context/ProjectsContext";
 import { v4 as uuidv4 } from "uuid";
 import { useModals } from "@mantine/modals";
 
 function App() {
   const [navbarOpened, setNavbarOpened] = useState(false);
+  const [projectSearchText, setProjectSearchText] = useState("");
   const modals = useModals();
   const theme = useMantineTheme();
   const projectsContext = useProjects();
@@ -36,6 +38,7 @@ function App() {
           onSubmit={(values) => {
             const newProject = { id: uuidv4(), ...values };
             projectsContext?.addProject(newProject);
+            setSelectedProject(newProject);
             modals.closeModal(modalId);
           }}
         />
@@ -55,41 +58,48 @@ function App() {
           width={{ sm: 300, lg: 400 }}
         >
           <Navbar.Section grow component={ScrollArea}>
-            {projectsContext?.projects.map((project) => (
-              <UnstyledButton
-                key={project.id}
-                sx={{
-                  width: "100%",
-                  padding: 10,
-                  borderRadius: 4,
-                  ":hover": { backgroundColor: theme.colors.gray[1] },
-                }}
-                onClick={() => {
-                  setSelectedProject(project);
-                  setNavbarOpened(false);
-                }}
-              >
-                <Group position="apart">
+            <TextInput
+              placeholder={"Search for a project"}
+              value={projectSearchText}
+              onChange={(event) => setProjectSearchText(event.target.value)}
+              type={"search"}
+              mb={"xs"}
+            />
+            {projectsContext?.projects
+              .filter(
+                (p) =>
+                  p.description
+                    .toLowerCase()
+                    .includes(projectSearchText.toLowerCase()) ||
+                  p.name.toLowerCase().includes(projectSearchText.toLowerCase())
+              )
+              .map((project) => (
+                <UnstyledButton
+                  key={project.id}
+                  sx={{
+                    width: "100%",
+                    padding: 10,
+                    borderRadius: 4,
+                    ":hover": { backgroundColor: theme.colors.gray[1] },
+                  }}
+                  onClick={() => {
+                    setSelectedProject(project);
+                    setNavbarOpened(false);
+                  }}
+                >
                   <Text>{project.name}</Text>
-                  <ActionIcon
-                    color={"red"}
-                    onClick={() => projectsContext?.deleteProject(project.id)}
-                  >
-                    <MinusIcon />
-                  </ActionIcon>
-                </Group>
-                <Text size={"sm"} color={theme.colors.gray[6]}>
-                  {project.description}
-                </Text>
-              </UnstyledButton>
-            ))}
+                  <Text size={"sm"} color={theme.colors.gray[6]}>
+                    {project.description}
+                  </Text>
+                </UnstyledButton>
+              ))}
           </Navbar.Section>
         </Navbar>
       }
       header={
         <Header height={70} padding={"md"}>
           <Group
-            position="apart"
+            position={"apart"}
             sx={{ display: "flex", alignItems: "center", height: "100%" }}
           >
             <Group>
@@ -110,17 +120,18 @@ function App() {
         </Header>
       }
     >
-      {selectedProject && (
+      {selectedProject &&
+      projectsContext?.projects.find((p) => p.id === selectedProject.id) ? (
         <>
-          <Group position="apart">
+          <Group position={"apart"}>
             <Text weight={"bold"} size={"xl"}>
               {selectedProject.name}
             </Text>
             {selectedProject.url && (
               <Button
-                component="a"
+                component={"a"}
                 href={selectedProject.url}
-                target="_blank"
+                target={"_blank"}
                 variant={"subtle"}
                 color={"gray"}
                 leftIcon={<GitHubLogoIcon />}
@@ -133,6 +144,8 @@ function App() {
             {selectedProject.rootDir}
           </Text>
         </>
+      ) : (
+        <Text color={"dimmed"}>No project selected</Text>
       )}
     </AppShell>
   );
