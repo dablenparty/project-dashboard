@@ -23,6 +23,12 @@ import { useModals } from "@mantine/modals";
 import { ipcRenderer } from "electron";
 import ReactMarkdown from "react-markdown";
 import { useDidUpdate } from "@mantine/hooks";
+import useLimitedArray from "@hooks/useLimitedArray";
+
+interface ReadmeCacheEntry {
+  projectId: string;
+  rawText: string;
+}
 
 function App() {
   const modals = useModals();
@@ -30,13 +36,27 @@ function App() {
   const { projects, addProject } = useProjects();
   const [readmeRaw, setReadmeRaw] = useState("");
   const [navbarOpened, setNavbarOpened] = useState(false);
-  const [projectSearchText, setProjectSearchText] = useState("");
   const [selectedProject, setSelectedProject] = useState(projects[0]);
+  const [projectSearchText, setProjectSearchText] = useState("");
+  const { array: readmeCache, addItem: addReadmeCacheEntry } =
+    useLimitedArray<ReadmeCacheEntry>([], 5);
 
   // This hook makes sure the function is only run once when the component is mounted
   useDidUpdate(() => {
+    // if the selected projects README text is stored in the cache, just use that
+    const entry = readmeCache.find((e) => e.projectId == selectedProject.id);
+    if (entry) {
+      setReadmeRaw(entry.rawText);
+      return;
+    }
+    // otherwise, fetch the README text from the folder
     ipcRenderer.invoke("getReadme", selectedProject.rootDir).then((readme) => {
-      setReadmeRaw(readme ?? "No README.md found");
+      const readmeText = readme ?? "No README.md found";
+      addReadmeCacheEntry({
+        projectId: selectedProject.id,
+        rawText: readmeText,
+      });
+      setReadmeRaw(readmeText);
     });
   }, [selectedProject]);
 
