@@ -88,3 +88,13 @@ ipcMain.handle("openPath", async (_, path: string) => {
 ipcMain.handle("openExternal", async (_, url: string) => {
   await shell.openExternal(url);
 });
+
+ipcMain.handle("getReadme", async (_, folder: string) => {
+  const readmePath = path.join(folder, "README.md");
+  try {
+    const readme = await readFile(readmePath);
+    return readme.toString();
+  } catch (error) {
+    return null;
+  }
+});
