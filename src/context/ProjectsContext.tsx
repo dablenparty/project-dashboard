@@ -46,6 +46,9 @@ export const ProjectsProvider = ({ children }: ProjectsProviderProps) => {
     });
   }, []);
 
+  // Mantine has a built-in hook for this pattern, but in order to prevent
+  // saving data that was just loaded, it has to be done manually. Otherwise,
+  // two refs are needed.
   // save the projects whenever they're updated
   useEffect(() => {
     if (!shouldSave.current) {
