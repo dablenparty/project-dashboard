@@ -128,9 +128,9 @@ function App() {
             </Text>
             {selectedProject.url && (
               <Button
-                component={"a"}
-                href={selectedProject.url}
-                target={"_blank"}
+                onClick={async () =>
+                  await ipcRenderer.invoke("openExternal", selectedProject.url)
+                }
                 variant={"subtle"}
                 color={"gray"}
                 leftIcon={<GitHubLogoIcon />}
@@ -141,7 +141,7 @@ function App() {
           </Group>
           <Anchor
             onClick={async () =>
-              ipcRenderer.invoke("openPath", selectedProject.rootDir)
+              await ipcRenderer.invoke("openPath", selectedProject.rootDir)
             }
             size={"sm"}
             color={"dimmed"}
