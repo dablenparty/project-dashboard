@@ -27,19 +27,18 @@ export default function ProjectForm({
   buttonText,
   project,
 }: ProjectFormProps) {
-  const projectsContext = useProjects();
+  const { projects } = useProjects();
 
   const form = useForm<ProjectFormState>({
     initialValues: project ?? {
-      name: `Project ${projectsContext?.projects.length ?? 0}`,
+      name: `Project ${projects.length ?? 0}`,
       description: "",
       rootDir: "",
       url: "",
     },
     validationRules: {
       name: (value) =>
-        projectsContext?.projects.find((p) => p.name === value.trim()) ===
-        undefined,
+        projects.find((p) => p.name === value.trim()) === undefined,
       url: (value) => {
         if (value.trim() === "") {
           return true;

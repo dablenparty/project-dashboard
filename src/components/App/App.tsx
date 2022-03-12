@@ -25,10 +25,8 @@ function App() {
   const [projectSearchText, setProjectSearchText] = useState("");
   const modals = useModals();
   const theme = useMantineTheme();
-  const projectsContext = useProjects();
-  const [selectedProject, setSelectedProject] = useState(
-    projectsContext?.projects[0]
-  );
+  const { projects, addProject } = useProjects();
+  const [selectedProject, setSelectedProject] = useState(projects[0]);
 
   const openProjectFormModal = () => {
     const modalId = modals.openModal({
@@ -37,7 +35,7 @@ function App() {
         <ProjectForm
           onSubmit={(values) => {
             const newProject = { id: uuidv4(), ...values };
-            projectsContext?.addProject(newProject);
+            addProject(newProject);
             setSelectedProject(newProject);
             modals.closeModal(modalId);
           }}
@@ -65,7 +63,7 @@ function App() {
               type={"search"}
               mb={"xs"}
             />
-            {projectsContext?.projects
+            {projects
               .filter(
                 (p) =>
                   p.description
@@ -120,8 +118,7 @@ function App() {
         </Header>
       }
     >
-      {selectedProject &&
-      projectsContext?.projects.find((p) => p.id === selectedProject.id) ? (
+      {selectedProject && projects.find((p) => p.id === selectedProject.id) ? (
         <>
           <Group position={"apart"}>
             <Text weight={"bold"} size={"xl"}>
