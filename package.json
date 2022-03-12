@@ -52,10 +52,7 @@
                 {
                   "html": "./src/index.html",
                   "js": "./src/render.ts",
-                  "name": "main_window",
-                  "preload": {
-                    "js": "./src/preload.ts"
-                  }
+                  "name": "main_window"
                 }
               ]
             }
