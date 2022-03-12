@@ -21,6 +21,8 @@ import { useProjects } from "@context/ProjectsContext";
 import { v4 as uuidv4 } from "uuid";
 import { useModals } from "@mantine/modals";
 import { ipcRenderer } from "electron";
+import ReactMarkdown from "react-markdown";
+import { useDidUpdate } from "@mantine/hooks";
 
 function App() {
   const [navbarOpened, setNavbarOpened] = useState(false);
@@ -29,6 +31,14 @@ function App() {
   const theme = useMantineTheme();
   const { projects, addProject } = useProjects();
   const [selectedProject, setSelectedProject] = useState(projects[0]);
+  const [readmeRaw, setReadmeRaw] = useState("");
+
+  // This hook makes sure the function is only run once when the component is mounted
+  useDidUpdate(() => {
+    ipcRenderer.invoke("getReadme", selectedProject.rootDir).then((readme) => {
+      setReadmeRaw(readme ?? "No README.md found");
+    });
+  }, [selectedProject]);
 
   const openProjectFormModal = () => {
     const modalId = modals.openModal({
@@ -88,7 +98,19 @@ function App() {
                   }}
                 >
                   <Text>{project.name}</Text>
-                  <Text size={"sm"} color={theme.colors.gray[6]}>
+                  {/* https://stackoverflow.com/questions/3922739/limit-text-length-to-n-lines-using-css */}
+                  <Text
+                    sx={{
+                      textOverflow: "ellipsis",
+                      overflow: "hidden",
+                      display: "-webkit-box",
+                      WebkitLineClamp: 1,
+                      lineClamp: 1,
+                      WebkitBoxOrient: "vertical",
+                    }}
+                    size={"sm"}
+                    color={theme.colors.gray[6]}
+                  >
                     {project.description}
                   </Text>
                 </UnstyledButton>
@@ -152,6 +174,7 @@ function App() {
             Description
           </Text>
           <Text>{selectedProject.description}</Text>
+          <ReactMarkdown>{readmeRaw}</ReactMarkdown>
         </>
       ) : (
         <Text color={"dimmed"}>No project selected</Text>
