@@ -1,4 +1,11 @@
-import { createContext, useContext, useEffect, useMemo, useState } from "react";
+import {
+  createContext,
+  useContext,
+  useEffect,
+  useMemo,
+  useRef,
+  useState,
+} from "react";
 import Project from "@models/Project";
 import { ipcRenderer } from "electron";
 
@@ -23,16 +30,24 @@ interface ProjectsProviderProps {
 
 export const ProjectsProvider = ({ children }: ProjectsProviderProps) => {
   const [projects, setProjects] = useState<Project[]>([]);
+  const shouldSave = useRef(false);
 
   // load the projects when the component is loaded
   useEffect(() => {
     ipcRenderer.invoke("loadProjects").then((projects: Project[]) => {
+      console.log("loaded projects", projects);
+      // prevent it from saving data that was just loaded
+      shouldSave.current = false;
       setProjects(projects);
     });
   }, []);
 
   // save the projects whenever they're updated
   useEffect(() => {
+    if (!shouldSave.current) {
+      shouldSave.current = true;
+      return;
+    }
     ipcRenderer.invoke("saveProjects", projects).then(() => {
       console.log("projects saved");
     });
