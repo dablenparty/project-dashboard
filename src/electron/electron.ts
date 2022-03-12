@@ -84,3 +84,7 @@ ipcMain.handle("openPath", async (_, path: string) => {
     console.error(error);
   }
 });
+
+ipcMain.handle("openExternal", async (_, url: string) => {
+  await shell.openExternal(url);
+});
