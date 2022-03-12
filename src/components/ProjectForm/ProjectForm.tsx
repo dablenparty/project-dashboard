@@ -1,4 +1,4 @@
-import { Button, Group, Paper, TextInput } from "@mantine/core";
+import { Button, Group, Paper, Text, TextInput } from "@mantine/core";
 import { useForm } from "@mantine/hooks";
 import {
   ArchiveIcon,
@@ -8,6 +8,7 @@ import {
 } from "@radix-ui/react-icons";
 import { useProjects } from "@context/ProjectsContext";
 import Project from "@models/Project";
+import { ipcRenderer } from "electron";
 
 interface ProjectFormProps {
   onSubmit: (values: ProjectFormState) => void;
@@ -66,6 +67,13 @@ export default function ProjectForm({
     form.reset();
   }
 
+  async function selectDirectory() {
+    const file = await ipcRenderer.invoke("openFileDialog");
+    if (file) {
+      form.setFieldValue("rootDir", file);
+    }
+  }
+
   return (
     <Paper>
       <form onSubmit={form.onSubmit(handleSubmit)}>
@@ -84,20 +92,32 @@ export default function ProjectForm({
           required
           {...form.getInputProps("description")}
         />
-        <TextInput
-          mt={"sm"}
-          label={"Root folder"}
-          icon={<ArchiveIcon />}
-          required
-          placeholder={"Where is your project stored?"}
-          {...form.getInputProps("rootDir")}
-        />
+        {form.values.rootDir ? (
+          <TextInput
+            readOnly
+            required
+            mt={"sm"}
+            label={"Root folder"}
+            icon={<ArchiveIcon />}
+            onClick={selectDirectory}
+            value={form.values.rootDir}
+          />
+        ) : (
+          <Group direction={"column"} spacing={0} mt={"sm"}>
+            <Text size={"sm"} weight={500}>
+              Root folder<span style={{ color: "#f03e3e" }}>*</span>
+            </Text>
+            <Button variant={"subtle"} onClick={selectDirectory}>
+              Select
+            </Button>
+          </Group>
+        )}
         <TextInput
           type={"url"}
           mt={"sm"}
           label={"URL"}
           icon={<GitHubLogoIcon />}
-          placeholder={"Is this project on GitHub?"}
+          placeholder={"Where is this project on GitHub?"}
           {...form.getInputProps("url")}
         />
         <Group mt={"lg"} position={"right"}>

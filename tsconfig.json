@@ -19,6 +19,7 @@
       "@components/*": ["./src/components/*"],
       "@models/*": ["./src/models/*"],
       "@context/*": ["./src/context/*"],
+      "@hooks/*": ["./src/hooks/*"],
     }
   },
   "include": ["src/**/*"],

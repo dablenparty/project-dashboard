@@ -12,6 +12,7 @@ import {
   useMantineTheme,
   Button,
   TextInput,
+  Anchor,
 } from "@mantine/core";
 import { useState } from "react";
 import { GitHubLogoIcon, PlusIcon } from "@radix-ui/react-icons";
@@ -19,14 +20,46 @@ import ProjectForm from "@components/ProjectForm";
 import { useProjects } from "@context/ProjectsContext";
 import { v4 as uuidv4 } from "uuid";
 import { useModals } from "@mantine/modals";
+import { ipcRenderer } from "electron";
+import ReactMarkdown from "react-markdown";
+import { useDidUpdate } from "@mantine/hooks";
+import useLimitedArray from "@hooks/useLimitedArray";
+
+interface ReadmeCacheEntry {
+  projectId: string;
+  rawText: string;
+}
 
 function App() {
-  const [navbarOpened, setNavbarOpened] = useState(false);
-  const [projectSearchText, setProjectSearchText] = useState("");
   const modals = useModals();
   const theme = useMantineTheme();
   const { projects, addProject } = useProjects();
+  const [readmeRaw, setReadmeRaw] = useState("");
+  const [navbarOpened, setNavbarOpened] = useState(false);
   const [selectedProject, setSelectedProject] = useState(projects[0]);
+  const [projectSearchText, setProjectSearchText] = useState("");
+  const { array: readmeCache, addItem: addReadmeCacheEntry } =
+    useLimitedArray<ReadmeCacheEntry>([], 5);
+
+  // This hook makes sure the function is only run once when the component is mounted
+  useDidUpdate(() => {
+    // if the selected projects README text is stored in the cache, just use that
+    const entry = readmeCache.find((e) => e.projectId == selectedProject.id);
+    if (entry) {
+      setReadmeRaw(entry.rawText);
+      return;
+    }
+    // TODO: set loading until the readme is loaded
+    // otherwise, fetch the README text from the folder
+    ipcRenderer.invoke("getReadme", selectedProject.rootDir).then((readme) => {
+      const readmeText = readme ?? "No README.md found";
+      addReadmeCacheEntry({
+        projectId: selectedProject.id,
+        rawText: readmeText,
+      });
+      setReadmeRaw(readmeText);
+    });
+  }, [selectedProject]);
 
   const openProjectFormModal = () => {
     const modalId = modals.openModal({
@@ -86,7 +119,19 @@ function App() {
                   }}
                 >
                   <Text>{project.name}</Text>
-                  <Text size={"sm"} color={theme.colors.gray[6]}>
+                  {/* https://stackoverflow.com/questions/3922739/limit-text-length-to-n-lines-using-css */}
+                  <Text
+                    sx={{
+                      textOverflow: "ellipsis",
+                      overflow: "hidden",
+                      display: "-webkit-box",
+                      WebkitLineClamp: 1,
+                      lineClamp: 1,
+                      WebkitBoxOrient: "vertical",
+                    }}
+                    size={"sm"}
+                    color={theme.colors.gray[6]}
+                  >
                     {project.description}
                   </Text>
                 </UnstyledButton>
@@ -126,9 +171,9 @@ function App() {
             </Text>
             {selectedProject.url && (
               <Button
-                component={"a"}
-                href={selectedProject.url}
-                target={"_blank"}
+                onClick={async () =>
+                  await ipcRenderer.invoke("openExternal", selectedProject.url)
+                }
                 variant={"subtle"}
                 color={"gray"}
                 leftIcon={<GitHubLogoIcon />}
@@ -137,14 +182,24 @@ function App() {
               </Button>
             )}
           </Group>
-          <Text size={"sm"} color={"dimmed"}>
+          <Anchor
+            onClick={async () =>
+              await ipcRenderer.invoke("openPath", selectedProject.rootDir)
+            }
+            size={"sm"}
+            color={"dimmed"}
+          >
             {selectedProject.rootDir}
-          </Text>
-          <br />
-          <Text size={"sm"} color={"dimmed"}>
+          </Anchor>
+          <Text mt={"md"} size={"sm"} color={"dimmed"}>
             Description
           </Text>
           <Text>{selectedProject.description}</Text>
+          <ReactMarkdown
+            components={{ a: (props) => <a target={"_blank"} {...props} /> }}
+          >
+            {readmeRaw}
+          </ReactMarkdown>
         </>
       ) : (
         <Text color={"dimmed"}>No project selected</Text>
