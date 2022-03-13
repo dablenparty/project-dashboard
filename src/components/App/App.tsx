@@ -13,6 +13,7 @@ import {
   Button,
   TextInput,
   Anchor,
+  LoadingOverlay,
 } from "@mantine/core";
 import { useState } from "react";
 import { GitHubLogoIcon, PlusIcon } from "@radix-ui/react-icons";
@@ -36,6 +37,7 @@ function App() {
   const { projects, addProject } = useProjects();
   const [readmeRaw, setReadmeRaw] = useState("");
   const [navbarOpened, setNavbarOpened] = useState(false);
+  const [readmeLoading, setReadmeLoading] = useState(false);
   const [selectedProject, setSelectedProject] = useState(projects[0]);
   const [projectSearchText, setProjectSearchText] = useState("");
   const { array: readmeCache, addItem: addReadmeCacheEntry } =
@@ -49,8 +51,8 @@ function App() {
       setReadmeRaw(entry.rawText);
       return;
     }
-    // TODO: set loading until the readme is loaded
     // otherwise, fetch the README text from the folder
+    setReadmeLoading(true);
     ipcRenderer.invoke("getReadme", selectedProject.rootDir).then((readme) => {
       const readmeText = readme ?? "No README.md found";
       addReadmeCacheEntry({
@@ -58,6 +60,7 @@ function App() {
         rawText: readmeText,
       });
       setReadmeRaw(readmeText);
+      setReadmeLoading(false);
     });
   }, [selectedProject]);
 
@@ -195,11 +198,19 @@ function App() {
             Description
           </Text>
           <Text>{selectedProject.description}</Text>
-          <ReactMarkdown
-            components={{ a: (props) => <a target={"_blank"} {...props} /> }}
+          <div
+            style={{
+              position: "relative",
+              height: readmeLoading ? "100%" : "auto",
+            }}
           >
-            {readmeRaw}
-          </ReactMarkdown>
+            <LoadingOverlay visible={readmeLoading} />
+            <ReactMarkdown
+              components={{ a: (props) => <a target={"_blank"} {...props} /> }}
+            >
+              {readmeRaw}
+            </ReactMarkdown>
+          </div>
         </>
       ) : (
         <Text color={"dimmed"}>No project selected</Text>
