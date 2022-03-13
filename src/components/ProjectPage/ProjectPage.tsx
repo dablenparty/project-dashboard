@@ -1,7 +1,14 @@
 import useLimitedArray from "@hooks/useLimitedArray";
-import { Anchor, Button, Group, LoadingOverlay, Text } from "@mantine/core";
+import {
+  ActionIcon,
+  Anchor,
+  Group,
+  LoadingOverlay,
+  Text,
+  useMantineTheme,
+} from "@mantine/core";
 import Project from "@models/Project";
-import { GitHubLogoIcon } from "@radix-ui/react-icons";
+import { GitHubLogoIcon, Pencil1Icon } from "@radix-ui/react-icons";
 import { ipcRenderer } from "electron";
 import { useEffect, useState } from "react";
 import ReactMarkdown from "react-markdown";
@@ -17,14 +24,15 @@ type ReadmeCacheEntry = {
 
 /**
  * Creates a Project Page component.
- * 
+ *
  * ## Important
  * `project` should be a state variable created by the `useState` hook
- * 
+ *
  * @param project The project to display
  * @returns ProjectPage component
  */
 export default function ProjectPage({ project }: ProjectPageProps) {
+  const theme = useMantineTheme();
   const [readmeRaw, setReadmeRaw] = useState("Loading...");
   const [readmeLoading, setReadmeLoading] = useState(false);
   const { array: readmeCache, addItem: addReadmeCacheEntry } =
@@ -56,18 +64,33 @@ export default function ProjectPage({ project }: ProjectPageProps) {
         <Text weight={"bold"} size={"xl"}>
           {project.name}
         </Text>
-        {project.url && (
-          <Button
-            onClick={async () =>
-              await ipcRenderer.invoke("openExternal", project.url)
-            }
-            variant={"subtle"}
-            color={"gray"}
-            leftIcon={<GitHubLogoIcon />}
+        <Group>
+          {project.url && (
+            <ActionIcon
+              sx={{
+                "&:hover": {
+                  color: theme.colors[theme.primaryColor][6],
+                },
+              }}
+              variant={"transparent"}
+              onClick={async () =>
+                await ipcRenderer.invoke("openExternal", project.url)
+              }
+            >
+              <GitHubLogoIcon />
+            </ActionIcon>
+          )}
+          <ActionIcon
+            sx={{
+              "&:hover": {
+                color: theme.colors[theme.primaryColor][6],
+              },
+            }}
+            variant={"transparent"}
           >
-            View on GitHub
-          </Button>
-        )}
+            <Pencil1Icon />
+          </ActionIcon>
+        </Group>
       </Group>
       <Anchor
         onClick={async () =>
