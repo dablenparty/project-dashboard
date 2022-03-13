@@ -35,7 +35,7 @@ function App() {
   const modals = useModals();
   const theme = useMantineTheme();
   const { projects, addProject } = useProjects();
-  const [readmeRaw, setReadmeRaw] = useState("");
+  const [readmeRaw, setReadmeRaw] = useState("Loading...");
   const [navbarOpened, setNavbarOpened] = useState(false);
   const [readmeLoading, setReadmeLoading] = useState(false);
   const [selectedProject, setSelectedProject] = useState(projects[0]);
@@ -91,7 +91,7 @@ function App() {
           hidden={!navbarOpened}
           width={{ sm: 300, lg: 400 }}
         >
-          <Navbar.Section grow component={ScrollArea}>
+          <Navbar.Section grow>
             <TextInput
               placeholder={"Search for a project"}
               value={projectSearchText}
@@ -99,46 +99,50 @@ function App() {
               type={"search"}
               mb={"xs"}
             />
-            {projects
-              .filter(
-                (p) =>
-                  p.description
-                    .toLowerCase()
-                    .includes(projectSearchText.toLowerCase()) ||
-                  p.name.toLowerCase().includes(projectSearchText.toLowerCase())
-              )
-              .map((project) => (
-                <UnstyledButton
-                  key={project.id}
-                  sx={{
-                    width: "100%",
-                    padding: 10,
-                    borderRadius: 4,
-                    ":hover": { backgroundColor: theme.colors.gray[1] },
-                  }}
-                  onClick={() => {
-                    setSelectedProject(project);
-                    setNavbarOpened(false);
-                  }}
-                >
-                  <Text>{project.name}</Text>
-                  {/* https://stackoverflow.com/questions/3922739/limit-text-length-to-n-lines-using-css */}
-                  <Text
+            <ScrollArea>
+              {projects
+                .filter(
+                  (p) =>
+                    p.description
+                      .toLowerCase()
+                      .includes(projectSearchText.toLowerCase()) ||
+                    p.name
+                      .toLowerCase()
+                      .includes(projectSearchText.toLowerCase())
+                )
+                .map((project) => (
+                  <UnstyledButton
+                    key={project.id}
                     sx={{
-                      textOverflow: "ellipsis",
-                      overflow: "hidden",
-                      display: "-webkit-box",
-                      WebkitLineClamp: 1,
-                      lineClamp: 1,
-                      WebkitBoxOrient: "vertical",
+                      width: "100%",
+                      padding: 10,
+                      borderRadius: 4,
+                      ":hover": { backgroundColor: theme.colors.gray[1] },
                     }}
-                    size={"sm"}
-                    color={theme.colors.gray[6]}
+                    onClick={() => {
+                      setSelectedProject(project);
+                      setNavbarOpened(false);
+                    }}
                   >
-                    {project.description}
-                  </Text>
-                </UnstyledButton>
-              ))}
+                    <Text>{project.name}</Text>
+                    {/* https://stackoverflow.com/questions/3922739/limit-text-length-to-n-lines-using-css */}
+                    <Text
+                      sx={{
+                        textOverflow: "ellipsis",
+                        overflow: "hidden",
+                        display: "-webkit-box",
+                        WebkitLineClamp: 1,
+                        lineClamp: 1,
+                        WebkitBoxOrient: "vertical",
+                      }}
+                      size={"sm"}
+                      color={theme.colors.gray[6]}
+                    >
+                      {project.description}
+                    </Text>
+                  </UnstyledButton>
+                ))}
+            </ScrollArea>
           </Navbar.Section>
         </Navbar>
       }
