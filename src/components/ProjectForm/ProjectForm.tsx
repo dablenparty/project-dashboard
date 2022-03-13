@@ -10,13 +10,13 @@ import { useProjects } from "@context/ProjectsContext";
 import Project from "@models/Project";
 import { ipcRenderer } from "electron";
 
-interface ProjectFormProps {
+type ProjectFormProps = {
   onSubmit: (values: ProjectFormState) => void;
   buttonText?: string;
   project?: Project;
 }
 
-interface ProjectFormState {
+type ProjectFormState = {
   name: string;
   description: string;
   rootDir: string;
@@ -38,8 +38,6 @@ export default function ProjectForm({
       url: "",
     },
     validationRules: {
-      name: (value) =>
-        projects.find((p) => p.name === value.trim()) === undefined,
       url: (value) => {
         if (value.trim() === "") {
           return true;
