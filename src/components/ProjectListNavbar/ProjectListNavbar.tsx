@@ -87,7 +87,13 @@ export default function ProjectListNavbar({
                   width: "100%",
                   padding: 10,
                   borderRadius: 4,
-                  ":hover": { backgroundColor: theme.colors.gray[1] },
+                  ":hover": {
+                    backgroundColor:
+                      theme.colorScheme === "light"
+                        ? theme.colors.gray[1]
+                        : theme.colors.gray[9],
+                    color: theme.colors[theme.primaryColor][6],
+                  },
                 }}
                 onClick={() => onProjectClick(project)}
               >
@@ -103,7 +109,7 @@ export default function ProjectListNavbar({
                     WebkitBoxOrient: "vertical",
                   }}
                   size={"sm"}
-                  color={theme.colors.gray[6]}
+                  color={"dimmed"}
                 >
                   {project.description}
                 </Text>
