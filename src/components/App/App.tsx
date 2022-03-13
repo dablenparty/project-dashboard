@@ -1,24 +1,17 @@
 import {
   AppShell,
   Text,
-  Navbar,
   Header,
   MediaQuery,
   Burger,
   Group,
-  ScrollArea,
-  UnstyledButton,
-  useMantineTheme,
   Button,
-  TextInput,
   Anchor,
   LoadingOverlay,
 } from "@mantine/core";
 import { useState } from "react";
-import { GitHubLogoIcon, MagnifyingGlassIcon } from "@radix-ui/react-icons";
-import ProjectForm from "@components/ProjectForm";
+import { GitHubLogoIcon } from "@radix-ui/react-icons";
 import { useProjects } from "@context/ProjectsContext";
-import { useModals } from "@mantine/modals";
 import { ipcRenderer } from "electron";
 import ReactMarkdown from "react-markdown";
 import { useDidUpdate } from "@mantine/hooks";
