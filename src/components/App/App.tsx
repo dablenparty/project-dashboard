@@ -1,9 +1,6 @@
 import {
   AppShell,
   Text,
-  Header,
-  MediaQuery,
-  Burger,
   Group,
   Button,
   Anchor,
@@ -17,6 +14,7 @@ import ReactMarkdown from "react-markdown";
 import { useDidUpdate } from "@mantine/hooks";
 import useLimitedArray from "@hooks/useLimitedArray";
 import ProjectListNavbar from "@components/ProjectListNavbar";
+import AppShellHeader from "@components/AppShellHeader";
 
 interface ReadmeCacheEntry {
   projectId: string;
@@ -72,23 +70,11 @@ function App() {
         />
       }
       header={
-        <Header height={70} padding={"md"}>
-          <div
-            style={{ display: "flex", alignItems: "center", height: "100%" }}
-          >
-            <Group>
-              <MediaQuery largerThan={"sm"} styles={{ display: "none" }}>
-                <Burger
-                  opened={navbarOpened}
-                  onClick={() => setNavbarOpened((o) => !o)}
-                  size={"sm"}
-                  mr={"xl"}
-                />
-              </MediaQuery>
-              <Text>Dashboard</Text>
-            </Group>
-          </div>
-        </Header>
+        <AppShellHeader
+          title={"Dashboard"}
+          burgerOpened={navbarOpened}
+          onBurgerClick={() => setNavbarOpened((o) => !o)}
+        />
       }
     >
       {selectedProject && projects.find((p) => p.id === selectedProject.id) ? (
