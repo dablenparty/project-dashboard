@@ -16,7 +16,11 @@ import {
   LoadingOverlay,
 } from "@mantine/core";
 import { useState } from "react";
-import { GitHubLogoIcon, PlusIcon } from "@radix-ui/react-icons";
+import {
+  GitHubLogoIcon,
+  MagnifyingGlassIcon,
+  PlusIcon,
+} from "@radix-ui/react-icons";
 import ProjectForm from "@components/ProjectForm";
 import { useProjects } from "@context/ProjectsContext";
 import { v4 as uuidv4 } from "uuid";
@@ -95,6 +99,7 @@ function App() {
             <TextInput
               placeholder={"Search for a project"}
               value={projectSearchText}
+              icon={<MagnifyingGlassIcon />}
               onChange={(event) => setProjectSearchText(event.target.value)}
               type={"search"}
               mb={"xs"}
