@@ -30,7 +30,7 @@ export function useProjects(): ProjectsContextProps {
 
 type ProjectsProviderProps = {
   children: React.ReactNode;
-}
+};
 
 export const ProjectsProvider = ({ children }: ProjectsProviderProps) => {
   const [projects, setProjects] = useState<Project[]>([]);

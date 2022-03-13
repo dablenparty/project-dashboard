@@ -14,14 +14,14 @@ type ProjectFormProps = {
   onSubmit: (values: ProjectFormState) => void;
   buttonText?: string;
   project?: Project;
-}
+};
 
 type ProjectFormState = {
   name: string;
   description: string;
   rootDir: string;
   url: string;
-}
+};
 
 export default function ProjectForm({
   onSubmit,
