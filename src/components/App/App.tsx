@@ -23,7 +23,7 @@ import { ipcRenderer } from "electron";
 import ReactMarkdown from "react-markdown";
 import { useDidUpdate } from "@mantine/hooks";
 import useLimitedArray from "@hooks/useLimitedArray";
-import ListNavbar from "@components/ListNavbar";
+import ProjectListNavbar from "@components/ProjectListNavbar";
 
 interface ReadmeCacheEntry {
   projectId: string;
@@ -69,7 +69,7 @@ function App() {
       navbarOffsetBreakpoint={"sm"}
       fixed
       navbar={
-        <ListNavbar
+        <ProjectListNavbar
           hidden={!navbarOpened}
           onProjectCreate={(p) => setSelectedProject(p)}
           onProjectClick={(p) => {

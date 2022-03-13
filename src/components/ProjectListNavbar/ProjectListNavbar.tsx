@@ -16,17 +16,17 @@ import { MagnifyingGlassIcon } from "@radix-ui/react-icons";
 import { useState } from "react";
 import { v4 as uuidv4 } from "uuid";
 
-type ListNavbarProps = {
+type ProjectListNavbarProps = {
   hidden: boolean;
   onProjectCreate?: (project: Project) => void;
   onProjectClick?: (project: Project) => void;
 };
 
-export default function ListNavbar({
+export default function ProjectListNavbar({
   hidden,
   onProjectCreate = () => undefined,
   onProjectClick = () => undefined,
-}: ListNavbarProps) {
+}: ProjectListNavbarProps) {
   const modals = useModals();
   const theme = useMantineTheme();
   const { projects, addProject } = useProjects();
