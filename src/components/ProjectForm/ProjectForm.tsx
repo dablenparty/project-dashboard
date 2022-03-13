@@ -10,13 +10,13 @@ import { useProjects } from "@context/ProjectsContext";
 import Project from "@models/Project";
 import { ipcRenderer } from "electron";
 
-interface ProjectFormProps {
+type ProjectFormProps = {
   onSubmit: (values: ProjectFormState) => void;
   buttonText?: string;
   project?: Project;
 }
 
-interface ProjectFormState {
+type ProjectFormState = {
   name: string;
   description: string;
   rootDir: string;

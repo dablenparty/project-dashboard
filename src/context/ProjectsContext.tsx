@@ -9,18 +9,18 @@ import {
 import Project from "@models/Project";
 import { ipcRenderer } from "electron";
 
-const ProjectsContext = createContext<ProjectsContextInterface | undefined>(
+const ProjectsContext = createContext<ProjectsContextProps | undefined>(
   undefined
 );
 
-interface ProjectsContextInterface {
+type ProjectsContextProps = {
   projects: Project[];
   addProject: (project: Project) => void;
   deleteProject: (projectId: string) => void;
   editProject: (project: Project) => void;
-}
+};
 
-export function useProjects(): ProjectsContextInterface {
+export function useProjects(): ProjectsContextProps {
   const context = useContext(ProjectsContext);
   if (!context) {
     throw new Error("useProjects must be used within a ProjectsProvider");
@@ -28,7 +28,7 @@ export function useProjects(): ProjectsContextInterface {
   return context;
 }
 
-interface ProjectsProviderProps {
+type ProjectsProviderProps = {
   children: React.ReactNode;
 }
 
