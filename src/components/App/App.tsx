@@ -15,18 +15,15 @@ import {
   LoadingOverlay,
 } from "@mantine/core";
 import { useState } from "react";
-import {
-  GitHubLogoIcon,
-  MagnifyingGlassIcon,
-} from "@radix-ui/react-icons";
+import { GitHubLogoIcon, MagnifyingGlassIcon } from "@radix-ui/react-icons";
 import ProjectForm from "@components/ProjectForm";
 import { useProjects } from "@context/ProjectsContext";
-import { v4 as uuidv4 } from "uuid";
 import { useModals } from "@mantine/modals";
 import { ipcRenderer } from "electron";
 import ReactMarkdown from "react-markdown";
 import { useDidUpdate } from "@mantine/hooks";
 import useLimitedArray from "@hooks/useLimitedArray";
+import ListNavbar from "@components/ListNavbar";
 
 interface ReadmeCacheEntry {
   projectId: string;
@@ -34,14 +31,11 @@ interface ReadmeCacheEntry {
 }
 
 function App() {
-  const modals = useModals();
-  const theme = useMantineTheme();
-  const { projects, addProject } = useProjects();
+  const { projects } = useProjects();
   const [readmeRaw, setReadmeRaw] = useState("Loading...");
   const [navbarOpened, setNavbarOpened] = useState(false);
   const [readmeLoading, setReadmeLoading] = useState(false);
   const [selectedProject, setSelectedProject] = useState(projects[0]);
-  const [projectSearchText, setProjectSearchText] = useState("");
   const { array: readmeCache, addItem: addReadmeCacheEntry } =
     useLimitedArray<ReadmeCacheEntry>([], 5);
 
@@ -66,22 +60,6 @@ function App() {
     });
   }, [selectedProject]);
 
-  const openProjectFormModal = () => {
-    const modalId = modals.openModal({
-      title: "Add a project",
-      children: (
-        <ProjectForm
-          onSubmit={(values) => {
-            const newProject = { id: uuidv4(), ...values };
-            addProject(newProject);
-            setSelectedProject(newProject);
-            modals.closeModal(modalId);
-          }}
-        />
-      ),
-    });
-  };
-
   // TODO: on edit list, display as list of checkbox buttons and change Add button to Delete button
   // consider adding a checkbox whose visibility is conditional on whether edit mode is enabled
   // for button on-click, check edit mode in function, or change function based on edit mode?
@@ -91,71 +69,14 @@ function App() {
       navbarOffsetBreakpoint={"sm"}
       fixed
       navbar={
-        <Navbar
-          padding={"sm"}
-          hiddenBreakpoint={"sm"}
+        <ListNavbar
           hidden={!navbarOpened}
-          width={{ sm: 300, lg: 400 }}
-        >
-          <Navbar.Section grow>
-            <TextInput
-              placeholder={"Search for a project"}
-              value={projectSearchText}
-              icon={<MagnifyingGlassIcon />}
-              onChange={(event) => setProjectSearchText(event.target.value)}
-              type={"search"}
-              mb={"xs"}
-            />
-            <Group grow spacing={"xs"} mb={"xs"}>
-              <Button onClick={openProjectFormModal}>Add</Button>
-              <Button>Edit</Button>
-            </Group>
-            <ScrollArea>
-              {projects
-                .filter(
-                  (p) =>
-                    p.description
-                      .toLowerCase()
-                      .includes(projectSearchText.toLowerCase()) ||
-                    p.name
-                      .toLowerCase()
-                      .includes(projectSearchText.toLowerCase())
-                )
-                .map((project) => (
-                  <UnstyledButton
-                    key={project.id}
-                    sx={{
-                      width: "100%",
-                      padding: 10,
-                      borderRadius: 4,
-                      ":hover": { backgroundColor: theme.colors.gray[1] },
-                    }}
-                    onClick={() => {
-                      setSelectedProject(project);
-                      setNavbarOpened(false);
-                    }}
-                  >
-                    <Text>{project.name}</Text>
-                    {/* https://stackoverflow.com/questions/3922739/limit-text-length-to-n-lines-using-css */}
-                    <Text
-                      sx={{
-                        textOverflow: "ellipsis",
-                        overflow: "hidden",
-                        display: "-webkit-box",
-                        WebkitLineClamp: 1,
-                        lineClamp: 1,
-                        WebkitBoxOrient: "vertical",
-                      }}
-                      size={"sm"}
-                      color={theme.colors.gray[6]}
-                    >
-                      {project.description}
-                    </Text>
-                  </UnstyledButton>
-                ))}
-            </ScrollArea>
-          </Navbar.Section>
-        </Navbar>
+          onProjectCreate={(p) => setSelectedProject(p)}
+          onProjectClick={(p) => {
+            setSelectedProject(p);
+            setNavbarOpened(false);
+          }}
+        />
       }
       header={
         <Header height={70} padding={"md"}>
