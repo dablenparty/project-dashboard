@@ -1,7 +1,7 @@
 import ProjectForm from "@components/ProjectForm";
 import { useProjects } from "@context/ProjectsContext";
 import {
-  Button,
+  ActionIcon,
   Group,
   Navbar,
   ScrollArea,
@@ -12,7 +12,7 @@ import {
 } from "@mantine/core";
 import { useModals } from "@mantine/modals";
 import Project from "@models/Project";
-import { MagnifyingGlassIcon } from "@radix-ui/react-icons";
+import { MagnifyingGlassIcon, PlusIcon } from "@radix-ui/react-icons";
 import { useState } from "react";
 import { v4 as uuidv4 } from "uuid";
 
@@ -56,17 +56,20 @@ export default function ProjectListNavbar({
       width={{ sm: 300, lg: 400 }}
     >
       <Navbar.Section grow>
-        <TextInput
-          placeholder={"Search for a project"}
-          value={projectSearchText}
-          icon={<MagnifyingGlassIcon />}
-          onChange={(event) => setProjectSearchText(event.target.value)}
-          type={"search"}
-          mb={"xs"}
-        />
-        <Group grow spacing={"xs"} mb={"xs"}>
-          <Button onClick={openProjectFormModal}>Add</Button>
-          <Button>Edit</Button>
+        <Group position={"apart"} spacing={0} mb={"xs"}>
+          <TextInput
+            sx={{
+              flexGrow: 1,
+            }}
+            placeholder={"Search for a project"}
+            value={projectSearchText}
+            icon={<MagnifyingGlassIcon />}
+            onChange={(event) => setProjectSearchText(event.target.value)}
+            type={"search"}
+          />
+          <ActionIcon ml={"sm"} onClick={openProjectFormModal}>
+            <PlusIcon />
+          </ActionIcon>
         </Group>
         <ScrollArea>
           {projects
