@@ -1,11 +1,9 @@
 import ProjectForm from "@components/ProjectForm";
 import { useProjects } from "@context/ProjectsContext";
-import useLimitedArray from "@hooks/useLimitedArray";
 import {
   ActionIcon,
   Anchor,
   Group,
-  LoadingOverlay,
   Text,
   useMantineTheme,
 } from "@mantine/core";
@@ -13,17 +11,12 @@ import { useModals } from "@mantine/modals";
 import Project from "@models/Project";
 import { GitHubLogoIcon, Pencil1Icon } from "@radix-ui/react-icons";
 import { ipcRenderer } from "electron";
-import { useEffect, useState } from "react";
 import ReactMarkdown from "react-markdown";
 
 type ProjectPageProps = {
   project: Project;
+  readmeText: string;
   onProjectChange?: (project: Project) => void;
-};
-
-type ReadmeCacheEntry = {
-  projectId: string;
-  rawText: string;
 };
 
 /**
@@ -37,15 +30,12 @@ type ReadmeCacheEntry = {
  */
 export default function ProjectPage({
   project,
+  readmeText,
   onProjectChange = () => undefined,
 }: ProjectPageProps) {
   const theme = useMantineTheme();
   const modals = useModals();
   const { editProject } = useProjects();
-  const [readmeRaw, setReadmeRaw] = useState("Loading...");
-  const [readmeLoading, setReadmeLoading] = useState(false);
-  const { array: readmeCache, addItem: addReadmeCacheEntry } =
-    useLimitedArray<ReadmeCacheEntry>([], 5);
 
   const openProjectFormModal = () => {
     const modalId = modals.openModal({
@@ -63,26 +53,6 @@ export default function ProjectPage({
       ),
     });
   };
-
-  useEffect(() => {
-    // if the selected projects README text is stored in the cache, just use that
-    const entry = readmeCache.find((e) => e.projectId == project.id);
-    if (entry) {
-      setReadmeRaw(entry.rawText);
-      return;
-    }
-    // otherwise, fetch the README text from the folder
-    setReadmeLoading(true);
-    ipcRenderer.invoke("getReadme", project.rootDir).then((readme) => {
-      const readmeText = readme ?? "No README.md found";
-      addReadmeCacheEntry({
-        projectId: project.id,
-        rawText: readmeText,
-      });
-      setReadmeRaw(readmeText);
-      setReadmeLoading(false);
-    });
-  }, [project]);
 
   return (
     <>
@@ -135,14 +105,12 @@ export default function ProjectPage({
       <div
         style={{
           position: "relative",
-          height: readmeLoading ? "100%" : "auto",
         }}
       >
-        <LoadingOverlay visible={readmeLoading} />
         <ReactMarkdown
           components={{ a: (props) => <a target={"_blank"} {...props} /> }}
         >
-          {readmeRaw}
+          {readmeText}
         </ReactMarkdown>
       </div>
     </>
