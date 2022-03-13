@@ -38,8 +38,6 @@ export default function ProjectForm({
       url: "",
     },
     validationRules: {
-      name: (value) =>
-        projects.find((p) => p.name === value.trim()) === undefined,
       url: (value) => {
         if (value.trim() === "") {
           return true;
