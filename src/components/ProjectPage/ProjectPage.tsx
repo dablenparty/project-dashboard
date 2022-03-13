@@ -1,3 +1,5 @@
+import ProjectForm from "@components/ProjectForm";
+import { useProjects } from "@context/ProjectsContext";
 import useLimitedArray from "@hooks/useLimitedArray";
 import {
   ActionIcon,
@@ -7,6 +9,7 @@ import {
   Text,
   useMantineTheme,
 } from "@mantine/core";
+import { useModals } from "@mantine/modals";
 import Project from "@models/Project";
 import { GitHubLogoIcon, Pencil1Icon } from "@radix-ui/react-icons";
 import { ipcRenderer } from "electron";
@@ -15,6 +18,7 @@ import ReactMarkdown from "react-markdown";
 
 type ProjectPageProps = {
   project: Project;
+  onProjectChange?: (project: Project) => void;
 };
 
 type ReadmeCacheEntry = {
@@ -31,12 +35,34 @@ type ReadmeCacheEntry = {
  * @param project The project to display
  * @returns ProjectPage component
  */
-export default function ProjectPage({ project }: ProjectPageProps) {
+export default function ProjectPage({
+  project,
+  onProjectChange = () => undefined,
+}: ProjectPageProps) {
   const theme = useMantineTheme();
+  const modals = useModals();
+  const { editProject } = useProjects();
   const [readmeRaw, setReadmeRaw] = useState("Loading...");
   const [readmeLoading, setReadmeLoading] = useState(false);
   const { array: readmeCache, addItem: addReadmeCacheEntry } =
     useLimitedArray<ReadmeCacheEntry>([], 5);
+
+  const openProjectFormModal = () => {
+    const modalId = modals.openModal({
+      title: "Edit project",
+      children: (
+        <ProjectForm
+          project={project}
+          onSubmit={(values) => {
+            const newProject = { ...project, ...values };
+            editProject(newProject);
+            onProjectChange(newProject);
+            modals.closeModal(modalId);
+          }}
+        />
+      ),
+    });
+  };
 
   useEffect(() => {
     // if the selected projects README text is stored in the cache, just use that
@@ -86,6 +112,7 @@ export default function ProjectPage({ project }: ProjectPageProps) {
                 color: theme.colors[theme.primaryColor][6],
               },
             }}
+            onClick={openProjectFormModal}
             variant={"transparent"}
           >
             <Pencil1Icon />
