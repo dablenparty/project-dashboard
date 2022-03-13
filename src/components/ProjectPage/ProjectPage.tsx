@@ -9,7 +9,7 @@ import {
 } from "@mantine/core";
 import { useModals } from "@mantine/modals";
 import Project from "@models/Project";
-import { GitHubLogoIcon, Pencil1Icon } from "@radix-ui/react-icons";
+import { GitHubLogoIcon, Pencil1Icon, TrashIcon } from "@radix-ui/react-icons";
 import { ipcRenderer } from "electron";
 import ReactMarkdown from "react-markdown";
 
@@ -35,7 +35,7 @@ export default function ProjectPage({
 }: ProjectPageProps) {
   const theme = useMantineTheme();
   const modals = useModals();
-  const { editProject } = useProjects();
+  const { editProject, deleteProject } = useProjects();
 
   const openProjectFormModal = () => {
     const modalId = modals.openModal({
@@ -68,7 +68,6 @@ export default function ProjectPage({
                   color: theme.colors[theme.primaryColor][6],
                 },
               }}
-              variant={"transparent"}
               onClick={async () =>
                 await ipcRenderer.invoke("openExternal", project.url)
               }
@@ -83,9 +82,37 @@ export default function ProjectPage({
               },
             }}
             onClick={openProjectFormModal}
-            variant={"transparent"}
           >
             <Pencil1Icon />
+          </ActionIcon>
+          <ActionIcon
+            sx={{
+              "&:hover": {
+                color: theme.colors.red[6],
+              },
+            }}
+            onClick={() => {
+              const modalId = modals.openConfirmModal({
+                title: `Delete ${project.name}?`,
+                children: (
+                  <Text>
+                    Are you sure you want to delete this project? This action
+                    cannot be undone.
+                  </Text>
+                ),
+                labels: { confirm: "Delete", cancel: "Cancel" },
+                confirmProps: {
+                  color: "red",
+                },
+                onConfirm: () => {
+                  deleteProject(project.id);
+                  modals.closeModal(modalId);
+                },
+                onCancel: () => modals.closeModal(modalId),
+              });
+            }}
+          >
+            <TrashIcon />
           </ActionIcon>
         </Group>
       </Group>
