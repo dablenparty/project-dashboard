@@ -6,7 +6,6 @@ import {
   MediaQuery,
   Burger,
   Group,
-  ActionIcon,
   ScrollArea,
   UnstyledButton,
   useMantineTheme,
@@ -19,7 +18,6 @@ import { useState } from "react";
 import {
   GitHubLogoIcon,
   MagnifyingGlassIcon,
-  PlusIcon,
 } from "@radix-ui/react-icons";
 import ProjectForm from "@components/ProjectForm";
 import { useProjects } from "@context/ProjectsContext";
@@ -84,6 +82,10 @@ function App() {
     });
   };
 
+  // TODO: on edit list, display as list of checkbox buttons and change Add button to Delete button
+  // consider adding a checkbox whose visibility is conditional on whether edit mode is enabled
+  // for button on-click, check edit mode in function, or change function based on edit mode?
+
   return (
     <AppShell
       navbarOffsetBreakpoint={"sm"}
@@ -104,6 +106,10 @@ function App() {
               type={"search"}
               mb={"xs"}
             />
+            <Group grow spacing={"xs"} mb={"xs"}>
+              <Button onClick={openProjectFormModal}>Add</Button>
+              <Button>Edit</Button>
+            </Group>
             <ScrollArea>
               {projects
                 .filter(
@@ -153,9 +159,8 @@ function App() {
       }
       header={
         <Header height={70} padding={"md"}>
-          <Group
-            position={"apart"}
-            sx={{ display: "flex", alignItems: "center", height: "100%" }}
+          <div
+            style={{ display: "flex", alignItems: "center", height: "100%" }}
           >
             <Group>
               <MediaQuery largerThan={"sm"} styles={{ display: "none" }}>
@@ -168,10 +173,7 @@ function App() {
               </MediaQuery>
               <Text>Dashboard</Text>
             </Group>
-            <ActionIcon onClick={openProjectFormModal}>
-              <PlusIcon />
-            </ActionIcon>
-          </Group>
+          </div>
         </Header>
       }
     >
