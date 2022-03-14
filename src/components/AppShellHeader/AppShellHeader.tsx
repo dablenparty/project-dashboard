@@ -23,6 +23,7 @@ export default function AppShellHeader({
         <>
           <SettingsPage />
           <Button
+            mt={"lg"}
             sx={{ float: "right" }}
             onClick={() => modals.closeModal(modalId)}
           >
