@@ -5,11 +5,14 @@ import {
   ColorSchemeProvider,
   MantineProvider,
 } from "@mantine/core";
+import { useLocalStorageValue } from "@mantine/hooks";
 import { ModalsProvider } from "@mantine/modals";
-import { useState } from "react";
 
 export default function App() {
-  const [colorScheme, setColorScheme] = useState<ColorScheme>("light");
+  const [colorScheme, setColorScheme] = useLocalStorageValue<ColorScheme>({
+    key: "mantineColorScheme",
+    defaultValue: "light",
+  });
   const toggleColorScheme = (value?: ColorScheme) =>
     setColorScheme(value || (colorScheme === "light" ? "dark" : "light"));
 
