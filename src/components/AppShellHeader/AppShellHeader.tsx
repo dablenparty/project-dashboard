@@ -1,4 +1,5 @@
-import { Burger, Group, Header, MediaQuery, Text } from "@mantine/core";
+import { Burger, Button, Group, Header, MediaQuery, Text } from "@mantine/core";
+import { GearIcon } from "@radix-ui/react-icons";
 
 type AppShellHeaderProps = {
   title: string;
@@ -13,7 +14,10 @@ export default function AppShellHeader({
 }: AppShellHeaderProps) {
   return (
     <Header height={70} padding={"md"}>
-      <div style={{ display: "flex", alignItems: "center", height: "100%" }}>
+      <Group
+        position={"apart"}
+        style={{ display: "flex", alignItems: "center", height: "100%" }}
+      >
         <Group>
           <MediaQuery largerThan={"sm"} styles={{ display: "none" }}>
             <Burger
@@ -25,7 +29,8 @@ export default function AppShellHeader({
           </MediaQuery>
           <Text>{title}</Text>
         </Group>
-      </div>
+        <Button leftIcon={<GearIcon />}>Settings</Button>
+      </Group>
     </Header>
   );
 }
