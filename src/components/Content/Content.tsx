@@ -13,7 +13,7 @@ type ReadmeCacheEntry = {
   rawText: string;
 };
 
-function App() {
+function Content() {
   const { projects } = useProjects();
   const [readmeRaw, setReadmeRaw] = useState("Loading...");
   const [navbarOpened, setNavbarOpened] = useState(false);
@@ -75,4 +75,4 @@ function App() {
   );
 }
 
-export default App;
+export default Content;

@@ -1,7 +1,7 @@
 import React from "react";
 import { render } from "react-dom";
 import "./index.css";
-import App from "./components/App";
+import Content from "./components/Content";
 import { MantineProvider } from "@mantine/core";
 import { ProjectsProvider } from "./context/ProjectsContext";
 import { ModalsProvider } from "@mantine/modals";
@@ -11,7 +11,7 @@ render(
     <MantineProvider withGlobalStyles>
       <ProjectsProvider>
         <ModalsProvider>
-          <App />
+          <Content />
         </ModalsProvider>
       </ProjectsProvider>
     </MantineProvider>
