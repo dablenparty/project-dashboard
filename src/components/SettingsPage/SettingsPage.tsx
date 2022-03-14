@@ -8,11 +8,14 @@ function capitalize(input: string, locale = navigator.language): string {
 
 export default function SettingsPage() {
   const { colorScheme, toggleColorScheme } = useMantineColorScheme();
+  // TODO: add color picker for primary color
 
   return (
     <Switch
       label={`${capitalize(colorScheme as string)} mode`}
       onClick={() => toggleColorScheme()}
+      checked={colorScheme === "dark"}
+      readOnly
     />
   );
 }
