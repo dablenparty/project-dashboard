@@ -1,4 +1,7 @@
-import { Burger, Group, Header, MediaQuery, Text } from "@mantine/core";
+import SettingsPage from "@components/SettingsPage";
+import { Burger, Button, Group, Header, MediaQuery, Text } from "@mantine/core";
+import { useModals } from "@mantine/modals";
+import { GearIcon } from "@radix-ui/react-icons";
 
 type AppShellHeaderProps = {
   title: string;
@@ -11,9 +14,32 @@ export default function AppShellHeader({
   burgerOpened,
   onBurgerClick,
 }: AppShellHeaderProps) {
+  const modals = useModals();
+
+  const openSettingsModal = () => {
+    const modalId = modals.openModal({
+      title: "Settings",
+      children: (
+        <>
+          <SettingsPage />
+          <Button
+            mt={"lg"}
+            sx={{ float: "right" }}
+            onClick={() => modals.closeModal(modalId)}
+          >
+            Close
+          </Button>
+        </>
+      ),
+    });
+  };
+
   return (
     <Header height={70} padding={"md"}>
-      <div style={{ display: "flex", alignItems: "center", height: "100%" }}>
+      <Group
+        position={"apart"}
+        style={{ display: "flex", alignItems: "center", height: "100%" }}
+      >
         <Group>
           <MediaQuery largerThan={"sm"} styles={{ display: "none" }}>
             <Burger
@@ -25,7 +51,10 @@ export default function AppShellHeader({
           </MediaQuery>
           <Text>{title}</Text>
         </Group>
-      </div>
+        <Button onClick={openSettingsModal} leftIcon={<GearIcon />}>
+          Settings
+        </Button>
+      </Group>
     </Header>
   );
 }

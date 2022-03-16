@@ -1,20 +1,11 @@
 import React from "react";
 import { render } from "react-dom";
 import "./index.css";
-import App from "./components/App";
-import { MantineProvider } from "@mantine/core";
-import { ProjectsProvider } from "./context/ProjectsContext";
-import { ModalsProvider } from "@mantine/modals";
+import App from "@components/App";
 
 render(
   <React.StrictMode>
-    <MantineProvider withGlobalStyles>
-      <ProjectsProvider>
-        <ModalsProvider>
-          <App />
-        </ModalsProvider>
-      </ProjectsProvider>
-    </MantineProvider>
+    <App />
   </React.StrictMode>,
   document.getElementById("root")
 );

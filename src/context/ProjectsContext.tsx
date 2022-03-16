@@ -38,12 +38,18 @@ export const ProjectsProvider = ({ children }: ProjectsProviderProps) => {
 
   // load the projects when the component is loaded
   useEffect(() => {
+    let isMounted = true;
     ipcRenderer.invoke("loadProjects").then((projects: Project[]) => {
-      console.log("loaded projects", projects);
-      // prevent it from saving data that was just loaded
-      shouldSave.current = false;
-      setProjects(projects);
+      if (isMounted) {
+        console.log("loaded projects", projects);
+        // prevent it from saving data that was just loaded
+        shouldSave.current = false;
+        setProjects(projects);
+      }
     });
+    return () => {
+      isMounted = false;
+    };
   }, []);
 
   // Mantine has a built-in hook for this pattern, but in order to prevent
