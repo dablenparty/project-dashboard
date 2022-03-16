@@ -27,6 +27,6 @@ jobs:
       - name: Release Artifact
         uses: ncipollo/release-action@v1
         with:
-          artifacts: "out/make/**.exe,out/make/**.zip"
+          artifacts: "out/make/**/*.exe,out/make/**/*.zip"
           token: ${{ secrets.GITHUB_TOKEN }}
           allowUpdates: true
