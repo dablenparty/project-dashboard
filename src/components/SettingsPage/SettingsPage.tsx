@@ -1,3 +1,4 @@
+import SelectColorItem from "@components/SelectColorItem";
 import {
   Select,
   Switch,
@@ -19,6 +20,7 @@ export default function SettingsPage() {
     .map((color) => ({
       value: color,
       label: capitalize(color),
+      color,
     }));
 
   return (
@@ -34,10 +36,10 @@ export default function SettingsPage() {
         data={selectData}
         label={"Primary color"}
         value={theme.primaryColor}
+        nothingFound={"No color found"}
+        itemComponent={SelectColorItem}
         placeholder={"Search for a color"}
         onChange={theme.other.setPrimaryColor}
-        searchable
-        nothingFound={"No color found"}
       />
     </>
   );
