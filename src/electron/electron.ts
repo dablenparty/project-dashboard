@@ -39,6 +39,35 @@ const createWindow = (): void => {
     shell.openExternal(url);
     return { action: "deny" };
   });
+
+  // IPC listeners
+  ipcMain.handle("openFileDialog", async () => {
+    const result = await dialog.showOpenDialog(mainWindow, {
+      properties: ["openDirectory", "dontAddToRecent", "createDirectory"],
+    });
+    return result.canceled ? null : result.filePaths[0];
+  });
+
+  ipcMain.handle("openPath", async (_, path: string) => {
+    const error = await shell.openPath(path);
+    if (error) {
+      console.error(error);
+    }
+  });
+
+  ipcMain.handle("openExternal", async (_, url: string) => {
+    await shell.openExternal(url);
+  });
+
+  ipcMain.handle("getReadme", async (_, folder: string) => {
+    const readmePath = path.join(folder, "README.md");
+    try {
+      const readme = await readFile(readmePath);
+      return readme.toString();
+    } catch (error) {
+      return null;
+    }
+  });
 };
 
 // This method will be called when Electron has finished
@@ -78,33 +107,5 @@ ipcMain.handle("loadProjects", async () => {
     return JSON.parse(projectsJson.toString());
   } catch (error) {
     return [];
-  }
-});
-
-ipcMain.handle("openFileDialog", async () => {
-  const result = await dialog.showOpenDialog({
-    properties: ["openDirectory", "dontAddToRecent", "createDirectory"],
-  });
-  return result.canceled ? null : result.filePaths[0];
-});
-
-ipcMain.handle("openPath", async (_, path: string) => {
-  const error = await shell.openPath(path);
-  if (error) {
-    console.error(error);
-  }
-});
-
-ipcMain.handle("openExternal", async (_, url: string) => {
-  await shell.openExternal(url);
-});
-
-ipcMain.handle("getReadme", async (_, folder: string) => {
-  const readmePath = path.join(folder, "README.md");
-  try {
-    const readme = await readFile(readmePath);
-    return readme.toString();
-  } catch (error) {
-    return null;
   }
 });
