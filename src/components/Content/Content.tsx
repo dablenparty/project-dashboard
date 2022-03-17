@@ -15,7 +15,7 @@ type ReadmeCacheEntry = {
 
 function Content() {
   const { projects } = useProjects();
-  const [readmeRaw, setReadmeRaw] = useState("Loading...");
+  const [readmeRaw, setReadmeRaw] = useState<string | undefined>("Loading...");
   const [navbarOpened, setNavbarOpened] = useState(false);
   const [selectedProject, setSelectedProject] = useState(projects[0]);
   const { array: readmeCache, addItem: addReadmeCacheEntry } =
@@ -31,7 +31,7 @@ function Content() {
     }
     // otherwise, fetch the README text from the folder
     ipcRenderer.invoke("getReadme", selectedProject.rootDir).then((readme) => {
-      const readmeText = readme ?? "No README.md found";
+      const readmeText = readme ?? undefined;
       addReadmeCacheEntry({
         projectId: selectedProject.id,
         rawText: readmeText,

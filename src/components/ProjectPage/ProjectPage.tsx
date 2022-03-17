@@ -15,7 +15,7 @@ import ReactMarkdown from "react-markdown";
 
 type ProjectPageProps = {
   project: Project;
-  readmeText: string;
+  readmeText?: string;
   onProjectChange?: (project: Project) => void;
 };
 
@@ -129,6 +129,9 @@ export default function ProjectPage({
         Description
       </Text>
       <Text>{project.description}</Text>
+      <Text mt={"md"} size={"sm"} color={"dimmed"}>
+        README.md
+      </Text>
       <div
         style={{
           position: "relative",
@@ -137,7 +140,7 @@ export default function ProjectPage({
         <ReactMarkdown
           components={{ a: (props) => <a target={"_blank"} {...props} /> }}
         >
-          {readmeText}
+          {readmeText ?? "No README.md found"}
         </ReactMarkdown>
       </div>
     </>

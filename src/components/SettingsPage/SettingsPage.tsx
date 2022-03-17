@@ -1,4 +1,10 @@
-import { Switch, useMantineColorScheme } from "@mantine/core";
+import SelectColorItem from "@components/SelectColorItem";
+import {
+  Select,
+  Switch,
+  useMantineColorScheme,
+  useMantineTheme,
+} from "@mantine/core";
 
 function capitalize(input: string, locale = navigator.language): string {
   //https://stackoverflow.com/questions/1026069/how-do-i-make-the-first-letter-of-a-string-uppercase-in-javascript
@@ -7,15 +13,34 @@ function capitalize(input: string, locale = navigator.language): string {
 }
 
 export default function SettingsPage() {
+  const theme = useMantineTheme();
   const { colorScheme, toggleColorScheme } = useMantineColorScheme();
-  // TODO: add color picker for primary color
+  const selectData = Object.keys(theme.colors)
+    .filter((color) => color !== "dark")
+    .map((color) => ({
+      value: color,
+      label: capitalize(color),
+      color,
+    }));
 
   return (
-    <Switch
-      label={`${capitalize(colorScheme as string)} mode`}
-      onClick={() => toggleColorScheme()}
-      checked={colorScheme === "dark"}
-      readOnly
-    />
+    <>
+      <Switch
+        label={`${capitalize(colorScheme as string)} mode`}
+        onClick={() => toggleColorScheme()}
+        checked={colorScheme === "dark"}
+        readOnly
+      />
+      <Select
+        mt={"sm"}
+        data={selectData}
+        label={"Primary color"}
+        value={theme.primaryColor}
+        nothingFound={"No color found"}
+        itemComponent={SelectColorItem}
+        placeholder={"Search for a color"}
+        onChange={theme.other.setPrimaryColor}
+      />
+    </>
   );
 }
