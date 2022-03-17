@@ -13,6 +13,10 @@ export default function App() {
     key: "mantineColorScheme",
     defaultValue: "light",
   });
+  const [primaryColor, setPrimaryColor] = useLocalStorageValue<string>({
+    key: "mantinePrimaryColor",
+    defaultValue: "blue",
+  });
   const toggleColorScheme = (value?: ColorScheme) =>
     setColorScheme(value || (colorScheme === "light" ? "dark" : "light"));
 
@@ -21,7 +25,10 @@ export default function App() {
       colorScheme={colorScheme}
       toggleColorScheme={toggleColorScheme}
     >
-      <MantineProvider theme={{ colorScheme }} withGlobalStyles>
+      <MantineProvider
+        theme={{ colorScheme, primaryColor, other: { setPrimaryColor } }}
+        withGlobalStyles
+      >
         <ProjectsProvider>
           <ModalsProvider>
             <Content />
