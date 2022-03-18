@@ -1,5 +1,6 @@
 import {
   createContext,
+  useCallback,
   useContext,
   useEffect,
   useMemo,
@@ -71,30 +72,38 @@ export const ProjectsProvider = ({ children }: ProjectsProviderProps) => {
    *
    * @param project Project to add to the list of projects
    */
-  function addProject(project: Project) {
-    const newProjects = [...projects, project];
-    setProjects(newProjects);
-  }
+  const addProject = useCallback(
+    (project: Project) => {
+      setProjects((projects) => [...projects, project]);
+    },
+    [setProjects]
+  );
 
   /**
    * Delete a project from the list of projects
    * @param projectId ID of project to remove from the list of projects
    */
-  function deleteProject(projectId: string) {
-    const filtered = projects.filter((p) => p.id !== projectId);
-    setProjects(filtered);
-  }
+  const deleteProject = useCallback(
+    (projectId: string) => {
+      const filtered = projects.filter((p) => p.id !== projectId);
+      setProjects(filtered);
+    },
+    [projects]
+  );
 
   /**
    * Updates a project in the list of projects with the ID matching that of the given project
    * @param project Updated project to replace the existing project
    */
-  function editProject(project: Project) {
-    const projectIndex = projects.findIndex((p) => p.id === project.id);
-    const edited = [...projects];
-    edited[projectIndex] = project;
-    setProjects(edited);
-  }
+  const editProject = useCallback(
+    (project: Project) => {
+      const projectIndex = projects.findIndex((p) => p.id === project.id);
+      const edited = [...projects];
+      edited[projectIndex] = project;
+      setProjects(edited);
+    },
+    [projects]
+  );
 
   const value = useMemo(() => {
     return {
@@ -103,7 +112,7 @@ export const ProjectsProvider = ({ children }: ProjectsProviderProps) => {
       deleteProject,
       editProject,
     };
-  }, [projects]);
+  }, [projects, addProject, deleteProject, editProject]);
 
   return (
     <ProjectsContext.Provider value={value}>
