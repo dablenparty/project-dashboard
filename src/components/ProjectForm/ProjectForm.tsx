@@ -70,6 +70,11 @@ export default function ProjectForm({
     if (file) {
       form.setFieldValue("rootDir", file);
     }
+    const url: string = await ipcRenderer.invoke("getRemoteGitUrl", file);
+    if (url) {
+      // pull the ".git" off the end of the url
+      form.setFieldValue("url", url.slice(0, url.length - 4));
+    }
   }
 
   return (
