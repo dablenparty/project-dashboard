@@ -54,6 +54,7 @@ export default function ProjectListNavbar({
       hiddenBreakpoint={"sm"}
       hidden={hidden}
       width={{ sm: 300, lg: 400 }}
+      sx={{ height: "auto" }}
     >
       <Navbar.Section grow>
         <Group position={"apart"} spacing={0} mb={"xs"}>
