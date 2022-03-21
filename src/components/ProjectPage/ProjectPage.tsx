@@ -138,7 +138,20 @@ export default function ProjectPage({
         }}
       >
         <ReactMarkdown
-          components={{ a: (props) => <a target={"_blank"} {...props} /> }}
+          components={{
+            a: (props) => (
+              <a
+                target={"_blank"}
+                style={{
+                  color:
+                    theme.colorScheme === "dark"
+                      ? "cornflowerblue"
+                      : "-webkit-link",
+                }}
+                {...props}
+              />
+            ),
+          }}
         >
           {readmeText ?? "No README.md found"}
         </ReactMarkdown>
