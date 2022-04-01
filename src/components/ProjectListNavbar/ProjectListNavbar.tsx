@@ -91,8 +91,8 @@ export default function ProjectListNavbar({
                   ":hover": {
                     backgroundColor:
                       theme.colorScheme === "light"
-                        ? theme.colors.gray[1]
-                        : theme.colors.gray[9],
+                        ? theme.colors.gray[0]
+                        : theme.colors.dark[8],
                     color: theme.colors[theme.primaryColor][6],
                   },
                 }}
