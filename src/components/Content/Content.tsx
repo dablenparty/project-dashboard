@@ -15,7 +15,7 @@ type ReadmeCacheEntry = {
 
 function Content() {
   const { projects } = useProjects();
-  const [readmeRaw, setReadmeRaw] = useState<string | undefined>("Loading...");
+  const [readmeRaw, setReadmeRaw] = useState<string>("Loading...");
   const [navbarOpened, setNavbarOpened] = useState(false);
   const [selectedProject, setSelectedProject] = useState(projects[0]);
   const { array: readmeCache, addItem: addReadmeCacheEntry } =
