@@ -46,7 +46,7 @@ export default function ProjectPage({
           onSubmit={(values) => {
             const newProject = { ...project, ...values };
             editProject(newProject);
-            onProjectChange(newProject);
+            onProjectChange?.(newProject);
             modals.closeModal(modalId);
           }}
         />
