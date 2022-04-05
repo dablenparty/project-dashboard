@@ -6,6 +6,13 @@ import {
   useMantineTheme,
 } from "@mantine/core";
 
+/**
+ * Capitalizes the first letter of a string
+ *
+ * @param input input string
+ * @param locale language locale
+ * @returns input string with the first character capitalized
+ */
 function capitalize(input: string, locale = navigator.language): string {
   //https://stackoverflow.com/questions/1026069/how-do-i-make-the-first-letter-of-a-string-uppercase-in-javascript
   const [first, ...rest] = input;
