@@ -46,6 +46,17 @@ function Content() {
     });
   }, [selectedProject]);
 
+  const projectPageComponent = selectedProject ? (
+    <ProjectPage
+      readmeText={readmeRaw}
+      project={selectedProject}
+      onProjectChange={(p) => setSelectedProject(p)}
+      onProjectDelete={() => setSelectedProject(undefined)}
+    />
+  ) : (
+    <Text color={"dimmed"}>No project selected</Text>
+  );
+
   return (
     <AppShell
       navbarOffsetBreakpoint={"sm"}
@@ -68,16 +79,7 @@ function Content() {
         />
       }
     >
-      {selectedProject && projects.find((p) => p.id === selectedProject.id) ? (
-        <ProjectPage
-          readmeText={readmeRaw}
-          project={selectedProject}
-          onProjectChange={(p) => setSelectedProject(p)}
-          onProjectDelete={() => setSelectedProject(undefined)}
-        />
-      ) : (
-        <Text color={"dimmed"}>No project selected</Text>
-      )}
+      {projectPageComponent}
     </AppShell>
   );
 }
