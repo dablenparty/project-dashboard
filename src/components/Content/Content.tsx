@@ -7,6 +7,7 @@ import ProjectPage from "@components/ProjectPage";
 import useLimitedArray from "@hooks/useLimitedArray";
 import { ipcRenderer } from "electron";
 import { useDidUpdate } from "@mantine/hooks";
+import Project from "@models/Project";
 
 type ReadmeCacheEntry = {
   projectId: string;
@@ -17,7 +18,9 @@ function Content() {
   const { projects } = useProjects();
   const [readmeRaw, setReadmeRaw] = useState<string>("Loading...");
   const [navbarOpened, setNavbarOpened] = useState(false);
-  const [selectedProject, setSelectedProject] = useState(projects[0]);
+  const [selectedProject, setSelectedProject] = useState<Project | undefined>(
+    projects[0]
+  );
   const { array: readmeCache, addItem: addReadmeCacheEntry } =
     useLimitedArray<ReadmeCacheEntry>([], 5);
 
@@ -70,6 +73,7 @@ function Content() {
           readmeText={readmeRaw}
           project={selectedProject}
           onProjectChange={(p) => setSelectedProject(p)}
+          onProjectDelete={() => setSelectedProject(undefined)}
         />
       ) : (
         <Text color={"dimmed"}>No project selected</Text>
