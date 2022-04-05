@@ -12,7 +12,6 @@ import { ipcRenderer } from "electron";
 
 type ProjectFormProps = {
   onSubmit: (values: ProjectFormState) => void;
-  buttonText?: string;
   project?: Project;
 };
 
@@ -23,11 +22,7 @@ type ProjectFormState = {
   url: string;
 };
 
-export default function ProjectForm({
-  onSubmit,
-  buttonText,
-  project,
-}: ProjectFormProps) {
+export default function ProjectForm({ onSubmit, project }: ProjectFormProps) {
   const { projects } = useProjects();
 
   const form = useForm<ProjectFormState>({
@@ -124,7 +119,7 @@ export default function ProjectForm({
           {...form.getInputProps("url")}
         />
         <Group mt={"lg"} position={"right"}>
-          <Button type={"submit"}>{buttonText || "Submit"}</Button>
+          <Button type={"submit"}>{project ? "Save" : "Add"}</Button>
         </Group>
       </form>
     </Paper>
