@@ -9,6 +9,7 @@ import {
 } from "react";
 import Project from "@models/Project";
 import { ipcRenderer } from "electron";
+import { flushSync } from "react-dom";
 
 const ProjectsContext = createContext<ProjectsContextProps | undefined>(
   undefined
@@ -43,9 +44,13 @@ export const ProjectsProvider = ({ children }: ProjectsProviderProps) => {
     ipcRenderer.invoke("loadProjects").then((projects: Project[]) => {
       if (isMounted) {
         console.log("loaded projects", projects);
-        // prevent it from saving data that was just loaded
-        shouldSave.current = false;
-        setProjects(projects);
+        // forces the component to re-render before changing the ref's value
+        // by opting this state change out of React's batching mechanism
+        flushSync(() => {
+          setProjects(projects);
+        });
+        // enable saving the projects to disk
+        shouldSave.current = true;
       }
     });
     return () => {
@@ -59,11 +64,10 @@ export const ProjectsProvider = ({ children }: ProjectsProviderProps) => {
   // save the projects whenever they're updated
   useEffect(() => {
     if (!shouldSave.current) {
-      shouldSave.current = true;
       return;
     }
     ipcRenderer.invoke("saveProjects", projects).then(() => {
-      console.log("projects saved");
+      console.log("saved projects", projects);
     });
   }, [projects]);
 
