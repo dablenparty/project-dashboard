@@ -56,6 +56,68 @@ export default function ProjectPage({
     });
   };
 
+  const githubIcon = project.url && (
+    <ActionIcon
+      sx={{
+        "&:hover": {
+          color: theme.colors[theme.primaryColor][6],
+        },
+      }}
+      onClick={async () =>
+        await ipcRenderer.invoke("openExternal", project.url)
+      }
+    >
+      <GitHubLogoIcon />
+    </ActionIcon>
+  );
+
+  const editIcon = (
+    <ActionIcon
+      sx={{
+        "&:hover": {
+          color: theme.colors[theme.primaryColor][6],
+        },
+      }}
+      onClick={openProjectFormModal}
+    >
+      <Pencil1Icon />
+    </ActionIcon>
+  );
+
+  const deleteIcon = (
+    <ActionIcon
+      sx={{
+        "&:hover": {
+          color: theme.colors.red[6],
+        },
+      }}
+      onClick={() => {
+        const modalId = modals.openConfirmModal({
+          title: `Delete ${project.name}?`,
+          children: (
+            <Text>
+              Are you sure you want to delete this project? This action cannot
+              be undone (this won't delete the project off your system, just
+              from this app).
+            </Text>
+          ),
+          labels: { confirm: "Delete", cancel: "Cancel" },
+          confirmProps: {
+            color: "red",
+          },
+          onConfirm: () => {
+            deleteProject(project.id);
+            onProjectDelete?.(project.id);
+            modals.closeModal(modalId);
+          },
+          onCancel: () => modals.closeModal(modalId),
+        });
+      }}
+    >
+      <TrashIcon />
+    </ActionIcon>
+  );
+
   return (
     <>
       <Group position={"apart"}>
@@ -63,61 +125,9 @@ export default function ProjectPage({
           {project.name}
         </Text>
         <Group>
-          {project.url && (
-            <ActionIcon
-              sx={{
-                "&:hover": {
-                  color: theme.colors[theme.primaryColor][6],
-                },
-              }}
-              onClick={async () =>
-                await ipcRenderer.invoke("openExternal", project.url)
-              }
-            >
-              <GitHubLogoIcon />
-            </ActionIcon>
-          )}
-          <ActionIcon
-            sx={{
-              "&:hover": {
-                color: theme.colors[theme.primaryColor][6],
-              },
-            }}
-            onClick={openProjectFormModal}
-          >
-            <Pencil1Icon />
-          </ActionIcon>
-          <ActionIcon
-            sx={{
-              "&:hover": {
-                color: theme.colors.red[6],
-              },
-            }}
-            onClick={() => {
-              const modalId = modals.openConfirmModal({
-                title: `Delete ${project.name}?`,
-                children: (
-                  <Text>
-                    Are you sure you want to delete this project? This action
-                    cannot be undone. (Note: this won't delete the project off
-                    your system, just from this app)
-                  </Text>
-                ),
-                labels: { confirm: "Delete", cancel: "Cancel" },
-                confirmProps: {
-                  color: "red",
-                },
-                onConfirm: () => {
-                  deleteProject(project.id);
-                  onProjectDelete?.(project.id);
-                  modals.closeModal(modalId);
-                },
-                onCancel: () => modals.closeModal(modalId),
-              });
-            }}
-          >
-            <TrashIcon />
-          </ActionIcon>
+          {githubIcon}
+          {editIcon}
+          {deleteIcon}
         </Group>
       </Group>
       <Anchor
