@@ -1,7 +1,7 @@
 {
   "name": "project-dashboard",
   "productName": "Project Dashboard",
-  "version": "1.2.1",
+  "version": "2.0.0",
   "description": "A dashboard for project management",
   "main": ".webpack/main",
   "scripts": {
