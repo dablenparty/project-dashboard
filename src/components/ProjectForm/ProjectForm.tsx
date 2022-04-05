@@ -98,7 +98,7 @@ export default function ProjectForm({ onSubmit, project }: ProjectFormProps) {
             label={"Root folder"}
             icon={<ArchiveIcon />}
             onClick={selectDirectory}
-            value={form.values.rootDir}
+            {...form.getInputProps("rootDir")}
           />
         ) : (
           <Group direction={"column"} spacing={0} mt={"sm"}>
