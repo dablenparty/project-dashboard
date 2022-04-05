@@ -39,7 +39,7 @@ export default function ProjectPage({
   const modals = useModals();
   const { editProject, deleteProject } = useProjects();
 
-  const openProjectFormModal = () => {
+  const openEditProjectModal = () => {
     const modalId = modals.openModal({
       title: "Edit project",
       children: (
@@ -78,7 +78,7 @@ export default function ProjectPage({
           color: theme.colors[theme.primaryColor][6],
         },
       }}
-      onClick={openProjectFormModal}
+      onClick={openEditProjectModal}
     >
       <Pencil1Icon />
     </ActionIcon>
