@@ -32,7 +32,7 @@ export default function ProjectListNavbar({
   const { projects, addProject } = useProjects();
   const [projectSearchText, setProjectSearchText] = useState("");
 
-  const openProjectFormModal = () => {
+  const openAddProjectModal = () => {
     const modalId = modals.openModal({
       title: "Add a project",
       children: (
@@ -66,7 +66,7 @@ export default function ProjectListNavbar({
             onChange={(event) => setProjectSearchText(event.target.value)}
             type={"search"}
           />
-          <ActionIcon ml={"sm"} onClick={openProjectFormModal}>
+          <ActionIcon ml={"sm"} onClick={openAddProjectModal}>
             <PlusIcon />
           </ActionIcon>
         </Group>
