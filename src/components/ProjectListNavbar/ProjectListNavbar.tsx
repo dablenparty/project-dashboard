@@ -50,7 +50,7 @@ export default function ProjectListNavbar({
 
   return (
     <Navbar
-      padding={"sm"}
+      p={"sm"}
       hiddenBreakpoint={"sm"}
       hidden={hidden}
       width={{ sm: 300, lg: 400 }}
