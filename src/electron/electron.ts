@@ -63,6 +63,7 @@ const createWindow = (): void => {
   });
 
   ipcMain.handle("getRemoteGitUrl", (_, projectDir: string) => {
+    // get the remote git url from the git CLI
     try {
       const child = spawnSync("git", ["config", "--get", "remote.origin.url"], {
         cwd: projectDir,
@@ -75,6 +76,7 @@ const createWindow = (): void => {
   });
 
   ipcMain.handle("getReadme", async (_, folder: string) => {
+    // reads a README.md file (if it exists) in the given folder and returns its contents
     const readmePath = path.join(folder, "README.md");
     try {
       const readme = await readFile(readmePath);
