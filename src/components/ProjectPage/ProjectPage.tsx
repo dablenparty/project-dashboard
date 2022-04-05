@@ -17,6 +17,7 @@ type ProjectPageProps = {
   project: Project;
   readmeText?: string;
   onProjectChange?: (project: Project) => void;
+  onProjectDelete?: (projectId: string) => void;
 };
 
 /**
@@ -31,7 +32,8 @@ type ProjectPageProps = {
 export default function ProjectPage({
   project,
   readmeText,
-  onProjectChange = () => undefined,
+  onProjectChange,
+  onProjectDelete,
 }: ProjectPageProps) {
   const theme = useMantineTheme();
   const modals = useModals();
@@ -107,6 +109,7 @@ export default function ProjectPage({
                 },
                 onConfirm: () => {
                   deleteProject(project.id);
+                  onProjectDelete?.(project.id);
                   modals.closeModal(modalId);
                 },
                 onCancel: () => modals.closeModal(modalId),
