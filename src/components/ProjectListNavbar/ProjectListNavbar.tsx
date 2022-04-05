@@ -54,14 +54,12 @@ export default function ProjectListNavbar({
       hiddenBreakpoint={"sm"}
       hidden={hidden}
       width={{ sm: 300, lg: 400 }}
-      sx={{ height: "100%" }}
+      height={"100%"}
     >
       <Navbar.Section grow>
         <Group position={"apart"} spacing={0} mb={"xs"}>
           <TextInput
-            sx={{
-              flexGrow: 1,
-            }}
+            sx={{ flexGrow: 1 }}
             placeholder={"Search for a project"}
             value={projectSearchText}
             icon={<MagnifyingGlassIcon />}
