@@ -50,11 +50,11 @@ export default function ProjectListNavbar({
 
   return (
     <Navbar
-      padding={"sm"}
+      p={"sm"}
       hiddenBreakpoint={"sm"}
       hidden={hidden}
       width={{ sm: 300, lg: 400 }}
-      sx={{ height: "auto" }}
+      sx={{ height: "100%" }}
     >
       <Navbar.Section grow>
         <Group position={"apart"} spacing={0} mb={"xs"}>
@@ -91,8 +91,8 @@ export default function ProjectListNavbar({
                   ":hover": {
                     backgroundColor:
                       theme.colorScheme === "light"
-                        ? theme.colors.gray[1]
-                        : theme.colors.gray[9],
+                        ? theme.colors.gray[0]
+                        : theme.colors.dark[8],
                     color: theme.colors[theme.primaryColor][6],
                   },
                 }}

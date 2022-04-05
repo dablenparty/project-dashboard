@@ -15,7 +15,7 @@ type ReadmeCacheEntry = {
 
 function Content() {
   const { projects } = useProjects();
-  const [readmeRaw, setReadmeRaw] = useState<string | undefined>("Loading...");
+  const [readmeRaw, setReadmeRaw] = useState<string>("Loading...");
   const [navbarOpened, setNavbarOpened] = useState(false);
   const [selectedProject, setSelectedProject] = useState(projects[0]);
   const { array: readmeCache, addItem: addReadmeCacheEntry } =
@@ -23,6 +23,9 @@ function Content() {
 
   // This hook ensures that the component is loaded before running the provided code in a useEffect hook
   useDidUpdate(() => {
+    if (!selectedProject) {
+      return;
+    }
     // if the selected projects README text is stored in the cache, just use that
     const entry = readmeCache.find((e) => e.projectId == selectedProject.id);
     if (entry) {

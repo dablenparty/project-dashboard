@@ -35,7 +35,7 @@ export default function AppShellHeader({
   };
 
   return (
-    <Header height={70} padding={"md"}>
+    <Header height={70} p={"md"}>
       <Group
         position={"apart"}
         style={{ display: "flex", alignItems: "center", height: "100%" }}
