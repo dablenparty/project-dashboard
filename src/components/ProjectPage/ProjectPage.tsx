@@ -97,7 +97,8 @@ export default function ProjectPage({
                 children: (
                   <Text>
                     Are you sure you want to delete this project? This action
-                    cannot be undone.
+                    cannot be undone. (Note: this won't delete the project off
+                    your system, just from this app)
                   </Text>
                 ),
                 labels: { confirm: "Delete", cancel: "Cancel" },
