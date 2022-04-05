@@ -1,14 +1,12 @@
 import ProjectForm from "@components/ProjectForm";
+import ProjectNavbarCard from "@components/ProjectNavbarCard";
 import { useProjects } from "@context/ProjectsContext";
 import {
   ActionIcon,
   Group,
   Navbar,
   ScrollArea,
-  Text,
   TextInput,
-  UnstyledButton,
-  useMantineTheme,
 } from "@mantine/core";
 import { useModals } from "@mantine/modals";
 import Project from "@models/Project";
@@ -28,7 +26,6 @@ export default function ProjectListNavbar({
   onProjectClick = () => undefined,
 }: ProjectListNavbarProps) {
   const modals = useModals();
-  const theme = useMantineTheme();
   const { projects, addProject } = useProjects();
   const [projectSearchText, setProjectSearchText] = useState("");
 
@@ -80,39 +77,11 @@ export default function ProjectListNavbar({
                 p.name.toLowerCase().includes(projectSearchText.toLowerCase())
             )
             .map((project) => (
-              <UnstyledButton
+              <ProjectNavbarCard
+                project={project}
                 key={project.id}
-                sx={{
-                  width: "100%",
-                  padding: 10,
-                  borderRadius: 4,
-                  ":hover": {
-                    backgroundColor:
-                      theme.colorScheme === "light"
-                        ? theme.colors.gray[0]
-                        : theme.colors.dark[8],
-                    color: theme.colors[theme.primaryColor][6],
-                  },
-                }}
-                onClick={() => onProjectClick(project)}
-              >
-                <Text>{project.name}</Text>
-                {/* https://stackoverflow.com/questions/3922739/limit-text-length-to-n-lines-using-css */}
-                <Text
-                  sx={{
-                    textOverflow: "ellipsis",
-                    overflow: "hidden",
-                    display: "-webkit-box",
-                    WebkitLineClamp: 1,
-                    lineClamp: 1,
-                    WebkitBoxOrient: "vertical",
-                  }}
-                  size={"sm"}
-                  color={"dimmed"}
-                >
-                  {project.description}
-                </Text>
-              </UnstyledButton>
+                onCardClick={(p) => onProjectClick(p)}
+              />
             ))}
         </ScrollArea>
       </Navbar.Section>
