@@ -20,6 +20,22 @@ type ProjectListNavbarProps = {
   onProjectClick?: (project: Project) => void;
 };
 
+/**
+ * Works like a case-insensitive `string.includes()`
+ *
+ * Examples:
+ * - `("foo", "f")` => `true`
+ * - `("foo", "F")` => `true`
+ * - `("fOo", "oo")` => `true`
+ *
+ * @param s string to search through
+ * @param substr substring to search for
+ * @returns `true` if `substr` is found in `s`, `false` otherwise
+ */
+function caseInsensitiveIncludes(s: string, substr: string) {
+  return s.toLowerCase().includes(substr.toLowerCase());
+}
+
 export default function ProjectListNavbar({
   hidden,
   onProjectCreate = () => undefined,
@@ -71,10 +87,8 @@ export default function ProjectListNavbar({
           {projects
             .filter(
               (p) =>
-                p.description
-                  .toLowerCase()
-                  .includes(projectSearchText.toLowerCase()) ||
-                p.name.toLowerCase().includes(projectSearchText.toLowerCase())
+                caseInsensitiveIncludes(p.description, projectSearchText) ||
+                caseInsensitiveIncludes(p.name, projectSearchText)
             )
             .map((project) => (
               <ProjectNavbarCard
