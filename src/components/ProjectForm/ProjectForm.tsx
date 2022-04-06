@@ -72,6 +72,28 @@ export default function ProjectForm({ onSubmit, project }: ProjectFormProps) {
     }
   }
 
+  //
+  const directorySelect = form.values.rootDir ? (
+    <TextInput
+      readOnly
+      required
+      mt={"sm"}
+      label={"Root folder"}
+      icon={<ArchiveIcon />}
+      onClick={selectDirectory}
+      {...form.getInputProps("rootDir")}
+    />
+  ) : (
+    <Group direction={"column"} spacing={0} mt={"sm"}>
+      <Text size={"sm"} weight={500}>
+        Root folder<span style={{ color: "#f03e3e" }}>*</span>
+      </Text>
+      <Button variant={"subtle"} onClick={selectDirectory}>
+        Select
+      </Button>
+    </Group>
+  );
+
   return (
     <Paper>
       <form onSubmit={form.onSubmit(handleSubmit)}>
@@ -90,26 +112,7 @@ export default function ProjectForm({ onSubmit, project }: ProjectFormProps) {
           required
           {...form.getInputProps("description")}
         />
-        {form.values.rootDir ? (
-          <TextInput
-            readOnly
-            required
-            mt={"sm"}
-            label={"Root folder"}
-            icon={<ArchiveIcon />}
-            onClick={selectDirectory}
-            {...form.getInputProps("rootDir")}
-          />
-        ) : (
-          <Group direction={"column"} spacing={0} mt={"sm"}>
-            <Text size={"sm"} weight={500}>
-              Root folder<span style={{ color: "#f03e3e" }}>*</span>
-            </Text>
-            <Button variant={"subtle"} onClick={selectDirectory}>
-              Select
-            </Button>
-          </Group>
-        )}
+        {directorySelect}
         <TextInput
           type={"url"}
           mt={"sm"}
