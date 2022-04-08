@@ -1,4 +1,5 @@
 import AddMenu from "@components/AddMenu";
+import MultiProjectForm from "@components/MultiProjectForm";
 import ProjectForm from "@components/ProjectForm";
 import ProjectNavbarCard from "@components/ProjectNavbarCard";
 import { useProjects } from "@context/ProjectsContext";
@@ -56,6 +57,13 @@ export default function ProjectListNavbar({
     });
   };
 
+  const openAddMultipleProjectsModal = () => {
+    const modalId = modals.openModal({
+      title: "Add multiple projects",
+      children: <MultiProjectForm />,
+    });
+  };
+
   return (
     <Navbar
       p={"sm"}
@@ -74,7 +82,11 @@ export default function ProjectListNavbar({
             onChange={(event) => setProjectSearchText(event.target.value)}
             type={"search"}
           />
-          <AddMenu ml={"sm"} onAddOneClick={openAddOneProjectModal} />
+          <AddMenu
+            ml={"sm"}
+            onAddOneClick={openAddOneProjectModal}
+            onAddManyClick={openAddMultipleProjectsModal}
+          />
         </Group>
         <ScrollArea>
           {projects
