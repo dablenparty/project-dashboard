@@ -18,6 +18,7 @@ const ProjectsContext = createContext<ProjectsContextProps | undefined>(
 type ProjectsContextProps = {
   projects: Project[];
   addProject: (project: Project) => void;
+  addManyProjects: (newProjects: Project[]) => void;
   deleteProject: (projectId: string) => void;
   editProject: (project: Project) => void;
 };
@@ -84,6 +85,18 @@ export const ProjectsProvider = ({ children }: ProjectsProviderProps) => {
   );
 
   /**
+   * Adds a list of new projects to the list of existing projects
+   *
+   * @param newProjects Projects to add to the list of projects
+   */
+  const addManyProjects = useCallback(
+    (newProjects: Project[]) => {
+      setProjects((projects) => [...projects, ...newProjects]);
+    },
+    [setProjects]
+  );
+
+  /**
    * Delete a project from the list of projects
    * @param projectId ID of project to remove from the list of projects
    */
@@ -113,10 +126,11 @@ export const ProjectsProvider = ({ children }: ProjectsProviderProps) => {
     return {
       projects,
       addProject,
+      addManyProjects,
       deleteProject,
       editProject,
     };
-  }, [projects, addProject, deleteProject, editProject]);
+  }, [projects, addProject, addManyProjects, deleteProject, editProject]);
 
   return (
     <ProjectsContext.Provider value={value}>

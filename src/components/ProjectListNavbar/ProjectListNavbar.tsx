@@ -1,18 +1,13 @@
+import AddMenu from "@components/AddMenu";
+import MultiProjectForm from "@components/MultiProjectForm";
 import ProjectForm from "@components/ProjectForm";
 import ProjectNavbarCard from "@components/ProjectNavbarCard";
 import { useProjects } from "@context/ProjectsContext";
-import {
-  ActionIcon,
-  Group,
-  Navbar,
-  ScrollArea,
-  TextInput,
-} from "@mantine/core";
+import { Group, Navbar, ScrollArea, TextInput } from "@mantine/core";
 import { useModals } from "@mantine/modals";
 import Project from "@models/Project";
-import { MagnifyingGlassIcon, PlusIcon } from "@radix-ui/react-icons";
+import { MagnifyingGlassIcon } from "@radix-ui/react-icons";
 import { useState } from "react";
-import { v4 as uuidv4 } from "uuid";
 
 type ProjectListNavbarProps = {
   hidden: boolean;
@@ -38,22 +33,20 @@ function caseInsensitiveIncludes(s: string, substr: string) {
 
 export default function ProjectListNavbar({
   hidden,
-  onProjectCreate = () => undefined,
-  onProjectClick = () => undefined,
+  onProjectCreate,
+  onProjectClick,
 }: ProjectListNavbarProps) {
   const modals = useModals();
-  const { projects, addProject } = useProjects();
+  const { projects } = useProjects();
   const [projectSearchText, setProjectSearchText] = useState("");
 
-  const openAddProjectModal = () => {
+  const openAddOneProjectModal = () => {
     const modalId = modals.openModal({
       title: "Add a project",
       children: (
         <ProjectForm
-          onSubmit={(values) => {
-            const newProject = { id: uuidv4(), ...values };
-            addProject(newProject);
-            onProjectCreate(newProject);
+          onSubmit={(newProject) => {
+            onProjectCreate?.(newProject);
             modals.closeModal(modalId);
           }}
         />
@@ -61,9 +54,22 @@ export default function ProjectListNavbar({
     });
   };
 
+  const openAddMultipleProjectsModal = () => {
+    const modalId = modals.openModal({
+      title: "Add multiple projects",
+      children: (
+        <MultiProjectForm onSubmit={() => modals.closeModal(modalId)} />
+      ),
+    });
+  };
+
   return (
     <Navbar
       p={"sm"}
+      pb={82}
+      sx={{
+        overflowY: "auto",
+      }}
       hiddenBreakpoint={"sm"}
       hidden={hidden}
       width={{ sm: 300, lg: 400 }}
@@ -79,9 +85,11 @@ export default function ProjectListNavbar({
             onChange={(event) => setProjectSearchText(event.target.value)}
             type={"search"}
           />
-          <ActionIcon ml={"sm"} onClick={openAddProjectModal}>
-            <PlusIcon />
-          </ActionIcon>
+          <AddMenu
+            ml={"sm"}
+            onAddOneClick={openAddOneProjectModal}
+            onAddManyClick={openAddMultipleProjectsModal}
+          />
         </Group>
         <ScrollArea>
           {projects
@@ -94,7 +102,7 @@ export default function ProjectListNavbar({
               <ProjectNavbarCard
                 project={project}
                 key={project.id}
-                onCardClick={(p) => onProjectClick(p)}
+                onCardClick={(p) => onProjectClick?.(p)}
               />
             ))}
         </ScrollArea>
