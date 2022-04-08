@@ -1,16 +1,11 @@
+import AddMenu from "@components/AddMenu";
 import ProjectForm from "@components/ProjectForm";
 import ProjectNavbarCard from "@components/ProjectNavbarCard";
 import { useProjects } from "@context/ProjectsContext";
-import {
-  ActionIcon,
-  Group,
-  Navbar,
-  ScrollArea,
-  TextInput,
-} from "@mantine/core";
+import { Group, Navbar, ScrollArea, TextInput } from "@mantine/core";
 import { useModals } from "@mantine/modals";
 import Project from "@models/Project";
-import { MagnifyingGlassIcon, PlusIcon } from "@radix-ui/react-icons";
+import { MagnifyingGlassIcon } from "@radix-ui/react-icons";
 import { useState } from "react";
 import { v4 as uuidv4 } from "uuid";
 
@@ -79,9 +74,7 @@ export default function ProjectListNavbar({
             onChange={(event) => setProjectSearchText(event.target.value)}
             type={"search"}
           />
-          <ActionIcon ml={"sm"} onClick={openAddProjectModal}>
-            <PlusIcon />
-          </ActionIcon>
+          <AddMenu ml={"sm"} onAddOneClick={openAddProjectModal} />
         </Group>
         <ScrollArea>
           {projects
