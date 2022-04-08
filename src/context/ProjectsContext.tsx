@@ -83,7 +83,7 @@ export const ProjectsProvider = ({ children }: ProjectsProviderProps) => {
           message: "Something went wrong while loading your projects",
           color: "red",
           icon: <Cross1Icon />,
-          autoClose: 2000,
+          autoClose: 3000,
           loading: false,
         });
       });
@@ -130,7 +130,7 @@ export const ProjectsProvider = ({ children }: ProjectsProviderProps) => {
           message: "Something went wrong while saving your projects",
           color: "red",
           icon: <Cross1Icon />,
-          autoClose: 2000,
+          autoClose: 3000,
           loading: false,
         });
       });
