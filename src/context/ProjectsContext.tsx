@@ -100,9 +100,40 @@ export const ProjectsProvider = ({ children }: ProjectsProviderProps) => {
     if (!shouldSave.current) {
       return;
     }
-    ipcRenderer.invoke("saveProjects", projects).then(() => {
-      console.log("saved projects", projects);
+    showNotification({
+      id: "projects-saving",
+      title: "Saving projects",
+      message: "Sit tight while we save your projects",
+      autoClose: false,
+      disallowClose: true,
+      loading: true,
     });
+    ipcRenderer
+      .invoke("saveProjects", projects)
+      .then(() => {
+        console.log("saved projects", projects);
+        updateNotification({
+          id: "projects-saving",
+          title: "Projects saved!",
+          message: `${projects.length} projects were successfully saved`,
+          autoClose: 2000,
+          color: "teal",
+          icon: <CheckIcon />,
+          loading: false,
+        });
+      })
+      .catch((e) => {
+        console.error(e);
+        updateNotification({
+          id: "projects-saving",
+          title: "Uh oh!",
+          message: "Something went wrong while saving your projects",
+          color: "red",
+          icon: <Cross1Icon />,
+          autoClose: 2000,
+          loading: false,
+        });
+      });
   }, [projects]);
 
   /**
