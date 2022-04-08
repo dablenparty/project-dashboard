@@ -15,4 +15,12 @@ Download the correct file for your system (`.zip` on Mac, `.exe` on Windows) and
 
 ## How it's made
 
-As stated above, this project is made with React and TypeScript. I chose TypeScript for one simple reason: I prefer strongly typed code. Nothing against JavaScript, it definitely has it's place, but I use TS where I can. As for the project itself, ut's a single page application where modals do all of the heavy lifting when it comes to things you'd usually route, like adding/editing a project, or managing settings. For the sake of my own sanity, I used a library called [Mantine](https://mantine.dev/) to keep styling (mostly) out of sight and out of mind. Mantine goes way beyond a simple component collection, providing new hooks, functions, and a myriad of simple and complex components for dealing with almost any situation you could think of. The main focus of this project is its functionality, not its looks, and a library like Mantine more than solves that problem. This entire application is wrapped up in [Electron](https://www.electronjs.org/) so that it can be run as a desktop app. I had originally tried to use [Tauri](https://tauri.studio/), but the incompleteness of their docs (especially around the Rust backend) and lack of good examples left me spending more time fighting with build tools and configuration than actually building the app.
+This project is built upon React 18 with the help of TypeScript and the Mantine UI library. It's then wrapped up in an Electron application for distribution as a desktop app. React and Electron are more tightly coupled than I'd like, but there isn't much else I can do about it other than introducing extra layers of abstraction; however, since I don't have any major plans for porting this to an actual website any time soon, it should be okay.
+
+## Credits
+
+- [React](https://reactjs.org/)
+- [Electron](https://www.electronjs.org/)
+  - Packaged with [Electron Forge](https://www.electronforge.io/)
+- [Mantine](https://mantine.dev/)
+  - Mantine is a simple, modern, and powerful React UI library for building user interfaces. Without it, I wouldn't be able to push this project out as fast as I do.
