@@ -134,10 +134,6 @@ ipcMain.handle("saveProjects", async (_, projects: Project[]) => {
 ipcMain.handle("loadProjects", async () => {
   const userData = app.getPath("userData");
   const filePath = path.join(userData, "projects.json");
-  try {
-    const projectsJson = await readFile(filePath);
-    return JSON.parse(projectsJson.toString());
-  } catch (error) {
-    return [];
-  }
+  const projectsJson = await readFile(filePath);
+  return JSON.parse(projectsJson.toString());
 });
