@@ -9,6 +9,8 @@ import {
 } from "@mantine/core";
 import { useListState } from "@mantine/hooks";
 import { Cross2Icon } from "@radix-ui/react-icons";
+import { ipcRenderer } from "electron";
+import path from "path";
 
 type BulkProject = {
   name: string;
@@ -20,18 +22,31 @@ export default function MultiProjectForm() {
   const theme = useMantineTheme();
   const [projects, projectsHandlers] = useListState<BulkProject>();
 
-  const selectDirectories = () => {
-    console.log("select directories");
+  const selectDirectories = async () => {
+    const files: string[] | null = await ipcRenderer.invoke("openFileDialog", {
+      multiple: true,
+    });
+    if (!files) {
+      return;
+    }
+    const newProjects = files.map((file) => ({
+      name: path.basename(file),
+      description: "",
+      rootDir: file,
+    }));
+    projectsHandlers.setState(newProjects);
   };
 
   return (
     <Paper>
       <form>
-        <Group direction={"column"} spacing={0}>
+        <Group direction={"row"}>
           <Text>
             Folders<span style={{ color: "#f03e3e" }}>*</span>
           </Text>
-          <Button onClick={selectDirectories}>Select</Button>
+          <Button variant={"light"} onClick={selectDirectories}>
+            Select
+          </Button>
         </Group>
         <Group mt={"md"} direction={"column"}>
           {projects.map((project, index) => (
@@ -43,15 +58,38 @@ export default function MultiProjectForm() {
               withBorder
             >
               <Group mb={"sm"} position="apart">
-                <Text>{project.rootDir}</Text>
+                <Text
+                  sx={{
+                    whiteSpace: "nowrap",
+                    overflow: "hidden",
+                    textOverflow: "ellipsis",
+                    flex: 1,
+                  }}
+                >
+                  {project.rootDir}
+                </Text>
                 <ActionIcon onClick={() => projectsHandlers.remove(index)}>
                   <Cross2Icon />
                 </ActionIcon>
               </Group>
-              <TextInput defaultValue={project.name} />
-              <TextInput mt={"sm"} defaultValue={project.description} />
+              <TextInput
+                required
+                label={"Name"}
+                placeholder={"Name"}
+                defaultValue={project.name}
+              />
+              <TextInput
+                required
+                label={"Description"}
+                placeholder={"Description"}
+                mt={"sm"}
+                defaultValue={project.name}
+              />
             </Paper>
           ))}
+        </Group>
+        <Group mt={"lg"} position={"right"}>
+          <Button type={"submit"}>Submit</Button>
         </Group>
       </form>
     </Paper>
