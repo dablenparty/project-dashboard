@@ -10,6 +10,8 @@ import {
 import Project from "@models/Project";
 import { ipcRenderer } from "electron";
 import { flushSync } from "react-dom";
+import { showNotification, updateNotification } from "@mantine/notifications";
+import { CheckIcon, Cross1Icon } from "@radix-ui/react-icons";
 
 const ProjectsContext = createContext<ProjectsContextProps | undefined>(
   undefined
@@ -42,18 +44,49 @@ export const ProjectsProvider = ({ children }: ProjectsProviderProps) => {
   // load the projects when the component is loaded
   useEffect(() => {
     let isMounted = true;
-    ipcRenderer.invoke("loadProjects").then((projects: Project[]) => {
-      if (isMounted) {
-        console.log("loaded projects", projects);
-        // forces the component to re-render before changing the ref's value
-        // by opting this state change out of React's batching mechanism
-        flushSync(() => {
-          setProjects(projects);
-        });
-        // enable saving the projects to disk
-        shouldSave.current = true;
-      }
+    showNotification({
+      id: "projects-loading",
+      title: "Loading projects",
+      message: "Sit tight while we load your projects",
+      autoClose: false,
+      disallowClose: true,
+      loading: true,
     });
+    ipcRenderer
+      .invoke("loadProjects")
+      .then((projects: Project[]) => {
+        if (isMounted) {
+          console.log("loaded projects", projects);
+          // forces the component to re-render before changing the ref's value
+          // by opting this state change out of React's batching mechanism
+          flushSync(() => {
+            setProjects(projects);
+          });
+          updateNotification({
+            id: "projects-loading",
+            title: "Projects loaded!",
+            message: `${projects.length} projects were found`,
+            autoClose: 2000,
+            color: "teal",
+            icon: <CheckIcon />,
+            loading: false,
+          });
+          // enable saving the projects to disk
+          shouldSave.current = true;
+        }
+      })
+      .catch((e) => {
+        console.error(e);
+        updateNotification({
+          id: "projects-loading",
+          title: "Uh oh!",
+          message: "Something went wrong while loading your projects",
+          color: "red",
+          icon: <Cross1Icon />,
+          autoClose: 2000,
+          loading: false,
+        });
+      });
     return () => {
       isMounted = false;
     };
