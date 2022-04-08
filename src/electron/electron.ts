@@ -1,5 +1,12 @@
 import Project from "@models/Project";
-import { app, BrowserWindow, dialog, ipcMain, shell } from "electron";
+import {
+  app,
+  BrowserWindow,
+  dialog,
+  ipcMain,
+  OpenDialogOptions,
+  shell,
+} from "electron";
 import { readFile, writeFile } from "fs/promises";
 import isDev from "electron-is-dev";
 import path from "path";
@@ -44,9 +51,17 @@ const createWindow = (): void => {
 
   // IPC listeners
   // opens a file dialog to select a folder and returns the selected folder
-  ipcMain.handle("openFileDialog", async () => {
+  ipcMain.handle("openFileDialog", async (_, props) => {
+    const dialogProps: OpenDialogOptions["properties"] = [
+      "openDirectory",
+      "dontAddToRecent",
+      "createDirectory",
+    ];
+    if (props?.multiple) {
+      dialogProps.push("multiSelections");
+    }
     const result = await dialog.showOpenDialog(mainWindow, {
-      properties: ["openDirectory", "dontAddToRecent", "createDirectory"],
+      properties: dialogProps,
     });
     return result.canceled ? null : result.filePaths;
   });
