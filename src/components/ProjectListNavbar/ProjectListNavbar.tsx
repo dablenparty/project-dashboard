@@ -57,13 +57,19 @@ export default function ProjectListNavbar({
   const openAddMultipleProjectsModal = () => {
     const modalId = modals.openModal({
       title: "Add multiple projects",
-      children: <MultiProjectForm />,
+      children: (
+        <MultiProjectForm onSubmit={() => modals.closeModal(modalId)} />
+      ),
     });
   };
 
   return (
     <Navbar
       p={"sm"}
+      pb={82}
+      sx={{
+        overflowY: "auto",
+      }}
       hiddenBreakpoint={"sm"}
       hidden={hidden}
       width={{ sm: 300, lg: 400 }}
