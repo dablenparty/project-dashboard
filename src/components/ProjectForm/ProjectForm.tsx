@@ -61,10 +61,14 @@ export default function ProjectForm({ onSubmit, project }: ProjectFormProps) {
   }
 
   async function selectDirectory() {
-    const file = await ipcRenderer.invoke("openFileDialog");
-    if (file) {
-      form.setFieldValue("rootDir", file);
+    const selectedFiles: string[] | null = await ipcRenderer.invoke(
+      "openFileDialog"
+    );
+    if (!selectedFiles) {
+      return;
     }
+    const [file] = selectedFiles;
+    form.setFieldValue("rootDir", file);
     const url: string = await ipcRenderer.invoke("getRemoteGitUrl", file);
     if (url) {
       // pull the ".git" off the end of the url
