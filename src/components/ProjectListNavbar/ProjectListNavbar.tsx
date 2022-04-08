@@ -8,7 +8,6 @@ import { useModals } from "@mantine/modals";
 import Project from "@models/Project";
 import { MagnifyingGlassIcon } from "@radix-ui/react-icons";
 import { useState } from "react";
-import { v4 as uuidv4 } from "uuid";
 
 type ProjectListNavbarProps = {
   hidden: boolean;
@@ -38,7 +37,7 @@ export default function ProjectListNavbar({
   onProjectClick,
 }: ProjectListNavbarProps) {
   const modals = useModals();
-  const { projects, addProject } = useProjects();
+  const { projects } = useProjects();
   const [projectSearchText, setProjectSearchText] = useState("");
 
   const openAddOneProjectModal = () => {
@@ -46,9 +45,7 @@ export default function ProjectListNavbar({
       title: "Add a project",
       children: (
         <ProjectForm
-          onSubmit={(values) => {
-            const newProject = { id: uuidv4(), ...values };
-            addProject(newProject);
+          onSubmit={(newProject) => {
             onProjectCreate?.(newProject);
             modals.closeModal(modalId);
           }}

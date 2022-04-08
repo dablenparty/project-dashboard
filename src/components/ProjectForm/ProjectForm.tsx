@@ -8,10 +8,11 @@ import {
 } from "@radix-ui/react-icons";
 import { useProjects } from "@context/ProjectsContext";
 import Project from "@models/Project";
+import { v4 as uuidv4 } from "uuid";
 import { ipcRenderer } from "electron";
 
 type ProjectFormProps = {
-  onSubmit: (values: ProjectFormState) => void;
+  onSubmit?: (newProject: Project) => void;
   project?: Project;
 };
 
@@ -23,7 +24,7 @@ type ProjectFormState = {
 };
 
 export default function ProjectForm({ onSubmit, project }: ProjectFormProps) {
-  const { projects } = useProjects();
+  const { projects, addProject } = useProjects();
 
   const form = useForm<ProjectFormState>({
     initialValues: project ?? {
@@ -56,7 +57,9 @@ export default function ProjectForm({ onSubmit, project }: ProjectFormProps) {
   });
 
   function handleSubmit(values: ProjectFormState) {
-    onSubmit(values);
+    const newProject = { id: uuidv4(), ...values };
+    addProject(newProject);
+    onSubmit?.(newProject);
     form.reset();
   }
 
