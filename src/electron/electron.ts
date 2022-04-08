@@ -48,7 +48,7 @@ const createWindow = (): void => {
     const result = await dialog.showOpenDialog(mainWindow, {
       properties: ["openDirectory", "dontAddToRecent", "createDirectory"],
     });
-    return result.canceled ? null : result.filePaths[0];
+    return result.canceled ? null : result.filePaths;
   });
 
   ipcMain.handle("openPath", async (_, path: string) => {
