@@ -40,7 +40,7 @@ export default function ProjectListNavbar({
   const { projects, addProject } = useProjects();
   const [projectSearchText, setProjectSearchText] = useState("");
 
-  const openAddProjectModal = () => {
+  const openAddOneProjectModal = () => {
     const modalId = modals.openModal({
       title: "Add a project",
       children: (
@@ -74,7 +74,7 @@ export default function ProjectListNavbar({
             onChange={(event) => setProjectSearchText(event.target.value)}
             type={"search"}
           />
-          <AddMenu ml={"sm"} onAddOneClick={openAddProjectModal} />
+          <AddMenu ml={"sm"} onAddOneClick={openAddOneProjectModal} />
         </Group>
         <ScrollArea>
           {projects
