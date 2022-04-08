@@ -7,10 +7,14 @@ import {
   TextInput,
   useMantineTheme,
 } from "@mantine/core";
-import { useListState } from "@mantine/hooks";
+import { useForm, useListState } from "@mantine/hooks";
 import { Cross2Icon } from "@radix-ui/react-icons";
 import { ipcRenderer } from "electron";
+import { v4 as uuidv4 } from "uuid";
 import path from "path";
+import { useProjects } from "@context/ProjectsContext";
+import Project from "@models/Project";
+import { useEffect } from "react";
 
 type BulkProject = {
   name: string;
@@ -18,9 +22,31 @@ type BulkProject = {
   rootDir: string;
 };
 
-export default function MultiProjectForm() {
+type MultiProjectFormState = {
+  projects: BulkProject[];
+};
+
+type MultiProjectFormProps = {
+  onSubmit?: (values: MultiProjectFormState) => void;
+};
+
+export default function MultiProjectForm({ onSubmit }: MultiProjectFormProps) {
   const theme = useMantineTheme();
   const [projects, projectsHandlers] = useListState<BulkProject>();
+  const { addManyProjects } = useProjects();
+  const form = useForm<MultiProjectFormState>({
+    initialValues: {
+      projects: [],
+    },
+    validationRules: {
+      projects: (values) =>
+        values.length > 0 && values.every((p) => p.description.trim() !== ""),
+    },
+  });
+
+  useEffect(() => {
+    form.setValues({ projects: projects });
+  }, [projects, form]);
 
   const selectDirectories = async () => {
     const files: string[] | null = await ipcRenderer.invoke("openFileDialog", {
@@ -29,17 +55,34 @@ export default function MultiProjectForm() {
     if (!files) {
       return;
     }
-    const newProjects = files.map((file) => ({
-      name: path.basename(file),
-      description: "",
-      rootDir: file,
-    }));
+    const newProjects = files.map((file) => {
+      const basename = path.basename(file);
+      return {
+        name: basename,
+        description: basename,
+        rootDir: file,
+      };
+    });
     projectsHandlers.setState(newProjects);
+    form.setValues({ projects: newProjects });
+  };
+
+  const handleSubmit = async (values: MultiProjectFormState) => {
+    const newProjects: Project[] = await Promise.all(
+      values.projects.map(async (project) => ({
+        id: uuidv4(),
+        url: await ipcRenderer.invoke("getRemoteGitUrl", project.rootDir),
+        ...project,
+      }))
+    );
+    addManyProjects(newProjects);
+    onSubmit?.(values);
+    form.reset();
   };
 
   return (
     <Paper>
-      <form>
+      <form onSubmit={form.onSubmit(handleSubmit)}>
         <Group direction={"row"}>
           <Text>
             Folders<span style={{ color: "#f03e3e" }}>*</span>
@@ -77,13 +120,23 @@ export default function MultiProjectForm() {
                 label={"Name"}
                 placeholder={"Name"}
                 defaultValue={project.name}
+                onChange={(e) =>
+                  projectsHandlers.setItemProp(index, "name", e.target.value)
+                }
               />
               <TextInput
                 required
                 label={"Description"}
                 placeholder={"Description"}
                 mt={"sm"}
-                defaultValue={project.name}
+                defaultValue={project.description}
+                onChange={(e) =>
+                  projectsHandlers.setItemProp(
+                    index,
+                    "description",
+                    e.target.value
+                  )
+                }
               />
             </Paper>
           ))}
