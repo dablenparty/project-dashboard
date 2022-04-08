@@ -95,7 +95,13 @@ export default function MultiProjectForm({ onSubmit }: MultiProjectFormProps) {
           {projects.map((project, index) => (
             <Paper
               p={"sm"}
-              sx={{ width: "100%", backgroundColor: theme.colors.dark[6] }}
+              sx={{
+                width: "100%",
+                backgroundColor:
+                  theme.colorScheme === "dark"
+                    ? theme.colors.dark[6]
+                    : theme.colors.gray[0],
+              }}
               key={project.rootDir}
               shadow={"md"}
               withBorder
