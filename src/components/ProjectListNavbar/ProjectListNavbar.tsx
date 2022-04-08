@@ -38,8 +38,8 @@ function caseInsensitiveIncludes(s: string, substr: string) {
 
 export default function ProjectListNavbar({
   hidden,
-  onProjectCreate = () => undefined,
-  onProjectClick = () => undefined,
+  onProjectCreate,
+  onProjectClick,
 }: ProjectListNavbarProps) {
   const modals = useModals();
   const { projects, addProject } = useProjects();
@@ -53,7 +53,7 @@ export default function ProjectListNavbar({
           onSubmit={(values) => {
             const newProject = { id: uuidv4(), ...values };
             addProject(newProject);
-            onProjectCreate(newProject);
+            onProjectCreate?.(newProject);
             modals.closeModal(modalId);
           }}
         />
@@ -94,7 +94,7 @@ export default function ProjectListNavbar({
               <ProjectNavbarCard
                 project={project}
                 key={project.id}
-                onCardClick={(p) => onProjectClick(p)}
+                onCardClick={(p) => onProjectClick?.(p)}
               />
             ))}
         </ScrollArea>
