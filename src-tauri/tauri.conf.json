@@ -19,6 +19,8 @@
         "open": true
       },
       "shell": {
+        "execute": true,
+        "open": "^(https?://)|(file://)|(/)|([A-Z]:\\\\)",
         "scope": [
           {
             "name": "git-remote-origin",
@@ -28,6 +30,7 @@
         ]
       },
       "fs": {
+        "readDir": true,
         "readFile": true,
         "writeFile": true,
         "scope": ["*"]
