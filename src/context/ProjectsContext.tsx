@@ -143,7 +143,9 @@ export const ProjectsProvider = ({ children }: ProjectsProviderProps) => {
    */
   const addProject = useCallback(
     (project: Project) => {
-      setProjects((projects) => [...projects, project]);
+      setProjects((projects) =>
+        [...projects, project].sort((a, b) => a.name.localeCompare(b.name))
+      );
     },
     [setProjects]
   );
@@ -155,7 +157,11 @@ export const ProjectsProvider = ({ children }: ProjectsProviderProps) => {
    */
   const addManyProjects = useCallback(
     (newProjects: Project[]) => {
-      setProjects((projects) => [...projects, ...newProjects]);
+      setProjects((projects) =>
+        [...projects, ...newProjects].sort((a, b) =>
+          a.name.localeCompare(b.name)
+        )
+      );
     },
     [setProjects]
   );
