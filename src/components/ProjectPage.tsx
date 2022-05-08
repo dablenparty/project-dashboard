@@ -11,7 +11,9 @@ import { useModals } from "@mantine/modals";
 import Project from "@/models/Project";
 import { GitHubLogoIcon, Pencil1Icon, TrashIcon } from "@radix-ui/react-icons";
 import { shell } from "@tauri-apps/api";
-import ReactMarkdown from "react-markdown";
+import { lazy, Suspense } from "react";
+
+const ReactMarkdown = lazy(() => import("react-markdown"));
 
 interface ProjectPageProps {
   project: Project;
@@ -147,24 +149,26 @@ export default function ProjectPage({
           position: "relative",
         }}
       >
-        <ReactMarkdown
-          components={{
-            a: (props) => (
-              <a
-                target={"_blank"}
-                style={{
-                  color:
-                    theme.colorScheme === "dark"
-                      ? "cornflowerblue"
-                      : "-webkit-link",
-                }}
-                {...props}
-              />
-            ),
-          }}
-        >
-          {readmeText ?? "No README.md found"}
-        </ReactMarkdown>
+        <Suspense fallback={<Text color="dimmed">Loading...</Text>}>
+          <ReactMarkdown
+            components={{
+              a: (props) => (
+                <a
+                  target={"_blank"}
+                  style={{
+                    color:
+                      theme.colorScheme === "dark"
+                        ? "cornflowerblue"
+                        : "-webkit-link",
+                  }}
+                  {...props}
+                />
+              ),
+            }}
+          >
+            {readmeText ?? "No README.md found"}
+          </ReactMarkdown>
+        </Suspense>
       </div>
     </>
   );
