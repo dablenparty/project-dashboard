@@ -13,7 +13,7 @@ async function getDataDir() {
  * @returns Remote Git URL if it exists, otherwise empty string
  */
 export async function getRemoteGitUrl(folder: string): Promise<string> {
-  const command = new Command("git", ["remote", "get-url", "origin"], {
+  const command = new Command("git-remote-origin", ["remote", "get-url", "origin"], {
     cwd: folder,
   });
   const result = await command.execute();
