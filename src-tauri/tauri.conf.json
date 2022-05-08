@@ -12,7 +12,26 @@
   },
   "tauri": {
     "allowlist": {
-      "all": true
+      "path": {
+        "all": true
+      },
+      "dialog": {
+        "open": true
+      },
+      "shell": {
+        "scope": [
+          {
+            "name": "git-remote-origin",
+            "cmd": "git",
+            "args": ["remote", "get-url", "origin"]
+          }
+        ]
+      },
+      "fs": {
+        "readFile": true,
+        "writeFile": true,
+        "scope": ["*"]
+      }
     },
     "bundle": {
       "active": true,
