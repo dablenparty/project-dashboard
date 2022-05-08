@@ -1,4 +1,4 @@
-import Project from "@models/Project";
+import Project from "@/models/Project";
 import { fs, path } from "@tauri-apps/api";
 import { Command } from "@tauri-apps/api/shell";
 

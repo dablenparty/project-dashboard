@@ -1,5 +1,5 @@
 import { UnstyledButton, Text, useMantineTheme } from "@mantine/core";
-import Project from "@models/Project";
+import Project from "@/models/Project";
 
 interface ProjectNavbarCardProps {
   project: Project;

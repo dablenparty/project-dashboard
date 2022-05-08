@@ -23,10 +23,10 @@
     "removeComments": true,
     "paths": {
       "*": ["node_modules/*"],
-      "@components/*": ["./src/components/*"],
-      "@models/*": ["./src/models/*"],
-      "@context/*": ["./src/context/*"],
-      "@hooks/*": ["./src/hooks/*"]
+      "@/components/*": ["./src/components/*"],
+      "@/models/*": ["./src/models/*"],
+      "@/context/*": ["./src/context/*"],
+      "@/hooks/*": ["./src/hooks/*"]
     }
   },
   "include": ["src"],

@@ -1,5 +1,5 @@
-import ProjectForm from "@components/ProjectForm";
-import { useProjects } from "@context/ProjectsContext";
+import ProjectForm from "@/components/ProjectForm";
+import { useProjects } from "@/context/ProjectsContext";
 import {
   ActionIcon,
   Anchor,
@@ -8,7 +8,7 @@ import {
   useMantineTheme,
 } from "@mantine/core";
 import { useModals } from "@mantine/modals";
-import Project from "@models/Project";
+import Project from "@/models/Project";
 import { GitHubLogoIcon, Pencil1Icon, TrashIcon } from "@radix-ui/react-icons";
 import { shell } from "@tauri-apps/api";
 import ReactMarkdown from "react-markdown";

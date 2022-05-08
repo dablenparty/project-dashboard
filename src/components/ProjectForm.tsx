@@ -6,8 +6,8 @@ import {
   LetterCaseCapitalizeIcon,
   QuestionMarkIcon,
 } from "@radix-ui/react-icons";
-import { useProjects } from "@context/ProjectsContext";
-import Project from "@models/Project";
+import { useProjects } from "@/context/ProjectsContext";
+import Project from "@/models/Project";
 import { v4 as uuidv4 } from "uuid";
 import { open as openDialog } from "@tauri-apps/api/dialog";
 import { getRemoteGitUrl } from "../tauriUtil";

@@ -1,11 +1,11 @@
 import { AppShell, Text } from "@mantine/core";
 import { useState } from "react";
-import ProjectListNavbar from "@components/ProjectListNavbar";
-import AppShellHeader from "@components/AppShellHeader";
-import ProjectPage from "@components/ProjectPage";
-import useLimitedArray from "@hooks/useLimitedArray";
+import ProjectListNavbar from "@/components/ProjectListNavbar";
+import AppShellHeader from "@/components/AppShellHeader";
+import ProjectPage from "@/components/ProjectPage";
+import useLimitedArray from "@/hooks/useLimitedArray";
 import { useDidUpdate } from "@mantine/hooks";
-import Project from "@models/Project";
+import Project from "@/models/Project";
 import { readTextFile } from "@tauri-apps/api/fs";
 import { path } from "@tauri-apps/api";
 

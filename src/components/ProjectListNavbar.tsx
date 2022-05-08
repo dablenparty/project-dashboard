@@ -1,11 +1,11 @@
-import AddMenu from "@components/AddMenu";
-import MultiProjectForm from "@components/MultiProjectForm";
-import ProjectForm from "@components/ProjectForm";
-import ProjectNavbarCard from "@components/ProjectNavbarCard";
-import { useProjects } from "@context/ProjectsContext";
+import AddMenu from "@/components/AddMenu";
+import MultiProjectForm from "@/components/MultiProjectForm";
+import ProjectForm from "@/components/ProjectForm";
+import ProjectNavbarCard from "@/components/ProjectNavbarCard";
+import { useProjects } from "@/context/ProjectsContext";
 import { Group, Navbar, ScrollArea, TextInput } from "@mantine/core";
 import { useModals } from "@mantine/modals";
-import Project from "@models/Project";
+import Project from "@/models/Project";
 import { MagnifyingGlassIcon } from "@radix-ui/react-icons";
 import { useState } from "react";
 

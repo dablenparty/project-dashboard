@@ -7,7 +7,7 @@ import {
   useRef,
   useState,
 } from "react";
-import Project from "@models/Project";
+import Project from "@/models/Project";
 import { flushSync } from "react-dom";
 import { showNotification, updateNotification } from "@mantine/notifications";
 import { CheckIcon, Cross1Icon } from "@radix-ui/react-icons";
