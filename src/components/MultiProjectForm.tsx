@@ -10,7 +10,7 @@ import {
 import { useForm, useListState } from "@mantine/hooks";
 import { Cross2Icon } from "@radix-ui/react-icons";
 import { v4 as uuidv4 } from "uuid";
-import { path } from "@tauri-apps/api";
+import { fs, path } from "@tauri-apps/api";
 import { useProjects } from "@context/ProjectsContext";
 import Project from "@models/Project";
 import { useEffect } from "react";
@@ -51,23 +51,21 @@ export default function MultiProjectForm({ onSubmit }: MultiProjectFormProps) {
   }, [projects]);
 
   const selectDirectories = async () => {
-    //! FIXME: create a custom Tauri command to allow for multiple directory selection
     const fromDialog = await openDialog({
       title: "Select directories",
       directory: true,
-      multiple: true,
     });
     if (!fromDialog) {
       return;
     }
-    const files = typeof fromDialog === "string" ? [fromDialog] : fromDialog;
+    const files = await fs.readDir(fromDialog as string);
     const newProjects = await Promise.all(
       files.map(async (file) => {
-        const basename = await path.basename(file);
+        const basename = await path.basename(file.path);
         return {
           name: basename,
           description: basename,
-          rootDir: file,
+          rootDir: file.path,
         };
       })
     );
