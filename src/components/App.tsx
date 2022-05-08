@@ -7,6 +7,7 @@ import {
 } from "@mantine/core";
 import { useLocalStorageValue } from "@mantine/hooks";
 import { ModalsProvider } from "@mantine/modals";
+import { NotificationsProvider } from "@mantine/notifications";
 
 export default function App() {
   const [colorScheme, setColorScheme] = useLocalStorageValue<ColorScheme>({
@@ -30,9 +31,11 @@ export default function App() {
         withGlobalStyles
       >
         <ProjectsProvider>
-          <ModalsProvider>
-            <Content />
-          </ModalsProvider>
+          <NotificationsProvider>
+            <ModalsProvider>
+              <Content />
+            </ModalsProvider>
+          </NotificationsProvider>
         </ProjectsProvider>
       </MantineProvider>
     </ColorSchemeProvider>

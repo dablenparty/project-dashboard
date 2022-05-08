@@ -10,18 +10,20 @@ import {
 import Project from "@models/Project";
 import { ipcRenderer } from "electron";
 import { flushSync } from "react-dom";
+import { showNotification, updateNotification } from "@mantine/notifications";
+import { CheckIcon, Cross1Icon } from "@radix-ui/react-icons";
 
 const ProjectsContext = createContext<ProjectsContextProps | undefined>(
   undefined
 );
 
-type ProjectsContextProps = {
+interface ProjectsContextProps {
   projects: Project[];
   addProject: (project: Project) => void;
   addManyProjects: (newProjects: Project[]) => void;
   deleteProject: (projectId: string) => void;
   editProject: (project: Project) => void;
-};
+}
 
 export function useProjects(): ProjectsContextProps {
   const context = useContext(ProjectsContext);
@@ -31,9 +33,9 @@ export function useProjects(): ProjectsContextProps {
   return context;
 }
 
-type ProjectsProviderProps = {
+interface ProjectsProviderProps {
   children: React.ReactNode;
-};
+}
 
 export const ProjectsProvider = ({ children }: ProjectsProviderProps) => {
   const [projects, setProjects] = useState<Project[]>([]);
@@ -42,18 +44,48 @@ export const ProjectsProvider = ({ children }: ProjectsProviderProps) => {
   // load the projects when the component is loaded
   useEffect(() => {
     let isMounted = true;
-    ipcRenderer.invoke("loadProjects").then((projects: Project[]) => {
-      if (isMounted) {
-        console.log("loaded projects", projects);
-        // forces the component to re-render before changing the ref's value
-        // by opting this state change out of React's batching mechanism
-        flushSync(() => {
-          setProjects(projects);
-        });
-        // enable saving the projects to disk
-        shouldSave.current = true;
-      }
+    showNotification({
+      id: "projects-loading",
+      title: "Loading projects",
+      message: "Sit tight while we load your projects",
+      autoClose: false,
+      disallowClose: true,
+      loading: true,
     });
+    ipcRenderer
+      .invoke("loadProjects")
+      .then((projects: Project[]) => {
+        if (isMounted) {
+          // forces the component to re-render before changing the ref's value
+          // by opting this state change out of React's batching mechanism
+          flushSync(() => {
+            setProjects(projects);
+          });
+          updateNotification({
+            id: "projects-loading",
+            title: "Projects loaded!",
+            message: `${projects.length} projects were found`,
+            autoClose: 2000,
+            color: "teal",
+            icon: <CheckIcon />,
+            loading: false,
+          });
+          // enable saving the projects to disk
+          shouldSave.current = true;
+        }
+      })
+      .catch((e) => {
+        console.error(e);
+        updateNotification({
+          id: "projects-loading",
+          title: "Uh oh!",
+          message: "Something went wrong while loading your projects",
+          color: "red",
+          icon: <Cross1Icon />,
+          autoClose: 3000,
+          loading: false,
+        });
+      });
     return () => {
       isMounted = false;
     };
@@ -67,9 +99,39 @@ export const ProjectsProvider = ({ children }: ProjectsProviderProps) => {
     if (!shouldSave.current) {
       return;
     }
-    ipcRenderer.invoke("saveProjects", projects).then(() => {
-      console.log("saved projects", projects);
+    showNotification({
+      id: "projects-saving",
+      title: "Saving projects",
+      message: "Sit tight while we save your projects",
+      autoClose: false,
+      disallowClose: true,
+      loading: true,
     });
+    ipcRenderer
+      .invoke("saveProjects", projects)
+      .then(() => {
+        updateNotification({
+          id: "projects-saving",
+          title: "Projects saved!",
+          message: `${projects.length} projects were successfully saved`,
+          autoClose: 2000,
+          color: "teal",
+          icon: <CheckIcon />,
+          loading: false,
+        });
+      })
+      .catch((e) => {
+        console.error(e);
+        updateNotification({
+          id: "projects-saving",
+          title: "Uh oh!",
+          message: "Something went wrong while saving your projects",
+          color: "red",
+          icon: <Cross1Icon />,
+          autoClose: 3000,
+          loading: false,
+        });
+      });
   }, [projects]);
 
   /**
@@ -79,7 +141,9 @@ export const ProjectsProvider = ({ children }: ProjectsProviderProps) => {
    */
   const addProject = useCallback(
     (project: Project) => {
-      setProjects((projects) => [...projects, project]);
+      setProjects((projects) =>
+        [...projects, project].sort((a, b) => a.name.localeCompare(b.name))
+      );
     },
     [setProjects]
   );
@@ -91,7 +155,11 @@ export const ProjectsProvider = ({ children }: ProjectsProviderProps) => {
    */
   const addManyProjects = useCallback(
     (newProjects: Project[]) => {
-      setProjects((projects) => [...projects, ...newProjects]);
+      setProjects((projects) =>
+        [...projects, ...newProjects].sort((a, b) =>
+          a.name.localeCompare(b.name)
+        )
+      );
     },
     [setProjects]
   );

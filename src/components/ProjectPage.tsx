@@ -13,12 +13,12 @@ import { GitHubLogoIcon, Pencil1Icon, TrashIcon } from "@radix-ui/react-icons";
 import { ipcRenderer } from "electron";
 import ReactMarkdown from "react-markdown";
 
-type ProjectPageProps = {
+interface ProjectPageProps {
   project: Project;
   readmeText?: string;
   onProjectChange?: (project: Project) => void;
   onProjectDelete?: (projectId: string) => void;
-};
+}
 
 /**
  * Creates a Project Page component.

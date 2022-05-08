@@ -3,11 +3,11 @@ import { Burger, Button, Group, Header, MediaQuery, Text } from "@mantine/core";
 import { useModals } from "@mantine/modals";
 import { GearIcon } from "@radix-ui/react-icons";
 
-type AppShellHeaderProps = {
+interface AppShellHeaderProps {
   title: string;
   burgerOpened: boolean;
   onBurgerClick: () => void;
-};
+}
 
 export default function AppShellHeader({
   title,

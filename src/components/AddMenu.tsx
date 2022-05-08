@@ -5,10 +5,10 @@ import {
   PlusIcon,
 } from "@radix-ui/react-icons";
 
-type AddMenuProps = MantineStyleSystemProps & {
+interface AddMenuProps extends MantineStyleSystemProps {
   onAddOneClick?: () => void;
   onAddManyClick?: () => void;
-};
+}
 
 export default function AddMenu({
   onAddOneClick,

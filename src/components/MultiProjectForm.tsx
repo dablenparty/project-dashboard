@@ -16,19 +16,19 @@ import { useProjects } from "@context/ProjectsContext";
 import Project from "@models/Project";
 import { useEffect } from "react";
 
-type BulkProject = {
+interface BulkProject {
   name: string;
   description: string;
   rootDir: string;
-};
+}
 
-type MultiProjectFormState = {
+interface MultiProjectFormState {
   projects: BulkProject[];
-};
+}
 
-type MultiProjectFormProps = {
+interface MultiProjectFormProps {
   onSubmit?: (values: MultiProjectFormState) => void;
-};
+}
 
 export default function MultiProjectForm({ onSubmit }: MultiProjectFormProps) {
   const theme = useMantineTheme();

@@ -9,11 +9,11 @@ import Project from "@models/Project";
 import { MagnifyingGlassIcon } from "@radix-ui/react-icons";
 import { useState } from "react";
 
-type ProjectListNavbarProps = {
+interface ProjectListNavbarProps {
   hidden: boolean;
   onProjectCreate?: (project: Project) => void;
   onProjectClick?: (project: Project) => void;
-};
+}
 
 /**
  * Works like a case-insensitive `string.includes()`

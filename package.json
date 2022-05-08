@@ -95,6 +95,7 @@
     "@mantine/core": "^4.1.2",
     "@mantine/hooks": "^4.1.2",
     "@mantine/modals": "^4.1.2",
+    "@mantine/notifications": "^4.1.2",
     "@radix-ui/react-icons": "^1.1.0",
     "electron-is-dev": "^2.0.0",
     "electron-squirrel-startup": "^1.0.0",
