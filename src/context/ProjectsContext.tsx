@@ -56,7 +56,6 @@ export const ProjectsProvider = ({ children }: ProjectsProviderProps) => {
       .invoke("loadProjects")
       .then((projects: Project[]) => {
         if (isMounted) {
-          console.log("loaded projects", projects);
           // forces the component to re-render before changing the ref's value
           // by opting this state change out of React's batching mechanism
           flushSync(() => {
@@ -111,7 +110,6 @@ export const ProjectsProvider = ({ children }: ProjectsProviderProps) => {
     ipcRenderer
       .invoke("saveProjects", projects)
       .then(() => {
-        console.log("saved projects", projects);
         updateNotification({
           id: "projects-saving",
           title: "Projects saved!",
