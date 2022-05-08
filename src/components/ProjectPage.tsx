@@ -1,5 +1,5 @@
-import ProjectForm from "@components/ProjectForm";
-import { useProjects } from "@context/ProjectsContext";
+import ProjectForm from "@/components/ProjectForm";
+import { useProjects } from "@/context/ProjectsContext";
 import {
   ActionIcon,
   Anchor,
@@ -8,10 +8,12 @@ import {
   useMantineTheme,
 } from "@mantine/core";
 import { useModals } from "@mantine/modals";
-import Project from "@models/Project";
+import Project from "@/models/Project";
 import { GitHubLogoIcon, Pencil1Icon, TrashIcon } from "@radix-ui/react-icons";
-import { ipcRenderer } from "electron";
-import ReactMarkdown from "react-markdown";
+import { shell } from "@tauri-apps/api";
+import { lazy, Suspense } from "react";
+
+const ReactMarkdown = lazy(() => import("react-markdown"));
 
 interface ProjectPageProps {
   project: Project;
@@ -63,9 +65,7 @@ export default function ProjectPage({
           color: theme.colors[theme.primaryColor][6],
         },
       }}
-      onClick={async () =>
-        await ipcRenderer.invoke("openExternal", project.url)
-      }
+      onClick={async () => await shell.open(project.url)}
     >
       <GitHubLogoIcon />
     </ActionIcon>
@@ -131,9 +131,7 @@ export default function ProjectPage({
         </Group>
       </Group>
       <Anchor
-        onClick={async () =>
-          await ipcRenderer.invoke("openPath", project.rootDir)
-        }
+        onClick={async () => await shell.open(project.rootDir)}
         size={"sm"}
         color={"dimmed"}
       >
@@ -151,24 +149,26 @@ export default function ProjectPage({
           position: "relative",
         }}
       >
-        <ReactMarkdown
-          components={{
-            a: (props) => (
-              <a
-                target={"_blank"}
-                style={{
-                  color:
-                    theme.colorScheme === "dark"
-                      ? "cornflowerblue"
-                      : "-webkit-link",
-                }}
-                {...props}
-              />
-            ),
-          }}
-        >
-          {readmeText ?? "No README.md found"}
-        </ReactMarkdown>
+        <Suspense fallback={<Text color="dimmed">Loading...</Text>}>
+          <ReactMarkdown
+            components={{
+              a: (props) => (
+                <a
+                  target={"_blank"}
+                  style={{
+                    color:
+                      theme.colorScheme === "dark"
+                        ? "cornflowerblue"
+                        : "-webkit-link",
+                  }}
+                  {...props}
+                />
+              ),
+            }}
+          >
+            {readmeText ?? "No README.md found"}
+          </ReactMarkdown>
+        </Suspense>
       </div>
     </>
   );

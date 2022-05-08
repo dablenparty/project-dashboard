@@ -1,5 +1,5 @@
-import Content from "@components/Content";
-import { ProjectsProvider } from "@context/ProjectsContext";
+import Content from "@/components/Content";
+import { ProjectsProvider } from "@/context/ProjectsContext";
 import {
   ColorScheme,
   ColorSchemeProvider,

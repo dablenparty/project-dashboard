@@ -20,14 +20,15 @@
     "jsx": "react-jsx",
     "downlevelIteration": true,
     "noEmit": true,
+    "removeComments": true,
     "paths": {
       "*": ["node_modules/*"],
-      "@components/*": ["./src/components/*"],
-      "@models/*": ["./src/models/*"],
-      "@context/*": ["./src/context/*"],
-      "@hooks/*": ["./src/hooks/*"]
+      "@/components/*": ["./src/components/*"],
+      "@/models/*": ["./src/models/*"],
+      "@/context/*": ["./src/context/*"],
+      "@/hooks/*": ["./src/hooks/*"]
     }
   },
-  "include": ["src/**/*"],
-  "exclude": ["node_modules", "dist"]
+  "include": ["src"],
+  "references": [{ "path": "./tsconfig.node.json" }]
 }

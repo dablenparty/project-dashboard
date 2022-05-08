@@ -1,4 +1,4 @@
-import SettingsPage from "@components/SettingsPage";
+import SettingsPage from "@/components/SettingsPage";
 import { Burger, Button, Group, Header, MediaQuery, Text } from "@mantine/core";
 import { useModals } from "@mantine/modals";
 import { GearIcon } from "@radix-ui/react-icons";

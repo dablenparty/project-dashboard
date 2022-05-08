@@ -1,4 +1,4 @@
-import SelectColorItem from "@components/SelectColorItem";
+import SelectColorItem from "@/components/SelectColorItem";
 import {
   Select,
   Switch,

@@ -1,0 +1,88 @@
+{
+  "$schema": "..\\node_modules/@tauri-apps/cli\\schema.json",
+  "build": {
+    "beforeBuildCommand": "npm run build",
+    "beforeDevCommand": "npm run dev",
+    "devPath": "http://localhost:3000",
+    "distDir": "../dist"
+  },
+  "package": {
+    "productName": "project-dashboard-tauri",
+    "version": "0.1.0"
+  },
+  "tauri": {
+    "allowlist": {
+      "path": {
+        "all": true
+      },
+      "dialog": {
+        "open": true
+      },
+      "shell": {
+        "execute": true,
+        "open": "^(https?://)|(file://)|(/)|([A-Z]:\\\\)",
+        "scope": [
+          {
+            "name": "git-remote-origin",
+            "cmd": "git",
+            "args": ["remote", "get-url", "origin"]
+          }
+        ]
+      },
+      "fs": {
+        "readDir": true,
+        "readFile": true,
+        "writeFile": true,
+        "scope": ["*"]
+      }
+    },
+    "bundle": {
+      "active": true,
+      "category": "DeveloperTool",
+      "copyright": "",
+      "deb": {
+        "depends": []
+      },
+      "externalBin": [],
+      "icon": [
+        "icons/32x32.png",
+        "icons/128x128.png",
+        "icons/128x128@2x.png",
+        "icons/icon.icns",
+        "icons/icon.ico"
+      ],
+      "identifier": "com.dablenparty.project_dashboard",
+      "longDescription": "",
+      "macOS": {
+        "entitlements": null,
+        "exceptionDomain": "",
+        "frameworks": [],
+        "providerShortName": null,
+        "signingIdentity": null
+      },
+      "resources": [],
+      "shortDescription": "",
+      "targets": "all",
+      "windows": {
+        "certificateThumbprint": null,
+        "digestAlgorithm": "sha256",
+        "timestampUrl": ""
+      }
+    },
+    "security": {
+      "csp": null
+    },
+    "updater": {
+      "active": false
+    },
+    "windows": [
+      {
+        "fullscreen": false,
+        "height": 600,
+        "resizable": true,
+        "title": "Project Dashboard",
+        "width": 800
+      }
+    ]
+  }
+}
