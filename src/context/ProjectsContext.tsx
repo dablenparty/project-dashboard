@@ -17,13 +17,13 @@ const ProjectsContext = createContext<ProjectsContextProps | undefined>(
   undefined
 );
 
-type ProjectsContextProps = {
+interface ProjectsContextProps {
   projects: Project[];
   addProject: (project: Project) => void;
   addManyProjects: (newProjects: Project[]) => void;
   deleteProject: (projectId: string) => void;
   editProject: (project: Project) => void;
-};
+}
 
 export function useProjects(): ProjectsContextProps {
   const context = useContext(ProjectsContext);
@@ -33,9 +33,9 @@ export function useProjects(): ProjectsContextProps {
   return context;
 }
 
-type ProjectsProviderProps = {
+interface ProjectsProviderProps {
   children: React.ReactNode;
-};
+}
 
 export const ProjectsProvider = ({ children }: ProjectsProviderProps) => {
   const [projects, setProjects] = useState<Project[]>([]);

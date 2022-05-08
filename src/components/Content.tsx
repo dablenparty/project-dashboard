@@ -8,10 +8,10 @@ import { ipcRenderer } from "electron";
 import { useDidUpdate } from "@mantine/hooks";
 import Project from "@models/Project";
 
-type ReadmeCacheEntry = {
+interface ReadmeCacheEntry {
   projectId: string;
   rawText: string;
-};
+}
 
 function Content() {
   const [readmeRaw, setReadmeRaw] = useState<string>("Loading...");

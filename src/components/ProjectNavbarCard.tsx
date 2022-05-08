@@ -1,10 +1,10 @@
 import { UnstyledButton, Text, useMantineTheme } from "@mantine/core";
 import Project from "@models/Project";
 
-type ProjectNavbarCardProps = {
+interface ProjectNavbarCardProps {
   project: Project;
   onCardClick: (project: Project) => void;
-};
+}
 
 export default function ProjectNavbarCard({
   project,

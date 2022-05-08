@@ -11,17 +11,17 @@ import Project from "@models/Project";
 import { v4 as uuidv4 } from "uuid";
 import { ipcRenderer } from "electron";
 
-type ProjectFormProps = {
+interface ProjectFormProps {
   onSubmit?: (newProject: Project) => void;
   project?: Project;
-};
+}
 
-type ProjectFormState = {
+interface ProjectFormState {
   name: string;
   description: string;
   rootDir: string;
   url: string;
-};
+}
 
 export default function ProjectForm({ onSubmit, project }: ProjectFormProps) {
   const { projects, addProject } = useProjects();
