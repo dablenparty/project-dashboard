@@ -5,6 +5,8 @@ import {
   useMantineColorScheme,
   useMantineTheme,
 } from "@mantine/core";
+import { showNotification } from "@mantine/notifications";
+import { BlendingModeIcon, MoonIcon, SunIcon } from "@radix-ui/react-icons";
 
 /**
  * Capitalizes the first letter of a string
@@ -34,7 +36,15 @@ export default function SettingsPage() {
     <>
       <Switch
         label={`${capitalize(colorScheme as string)} mode`}
-        onClick={() => toggleColorScheme()}
+        onClick={() => {
+          showNotification({
+            message: `Switched to ${
+              colorScheme === "light" ? "dark" : "light"
+            } mode`,
+            icon: colorScheme === "light" ? <MoonIcon /> : <SunIcon />,
+          });
+          toggleColorScheme();
+        }}
         checked={colorScheme === "dark"}
         readOnly
       />
@@ -46,7 +56,14 @@ export default function SettingsPage() {
         nothingFound={"No color found"}
         itemComponent={SelectColorItem}
         placeholder={"Search for a color"}
-        onChange={theme.other.setPrimaryColor}
+        onChange={(value) => {
+          if (!value) return;
+          showNotification({
+            message: `Switched color to ${value}`,
+            icon: <BlendingModeIcon />,
+          });
+          theme.other.setPrimaryColor(value);
+        }}
       />
     </>
   );
