@@ -10,7 +10,7 @@ import {
 import { useModals } from "@mantine/modals";
 import Project from "@models/Project";
 import { GitHubLogoIcon, Pencil1Icon, TrashIcon } from "@radix-ui/react-icons";
-import { ipcRenderer } from "electron";
+import { shell } from "@tauri-apps/api";
 import ReactMarkdown from "react-markdown";
 
 interface ProjectPageProps {
@@ -63,9 +63,7 @@ export default function ProjectPage({
           color: theme.colors[theme.primaryColor][6],
         },
       }}
-      onClick={async () =>
-        await ipcRenderer.invoke("openExternal", project.url)
-      }
+      onClick={async () => await shell.open(project.url)}
     >
       <GitHubLogoIcon />
     </ActionIcon>
@@ -131,9 +129,7 @@ export default function ProjectPage({
         </Group>
       </Group>
       <Anchor
-        onClick={async () =>
-          await ipcRenderer.invoke("openPath", project.rootDir)
-        }
+        onClick={async () => await shell.open(project.rootDir)}
         size={"sm"}
         color={"dimmed"}
       >

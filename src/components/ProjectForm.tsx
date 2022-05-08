@@ -9,7 +9,8 @@ import {
 import { useProjects } from "@context/ProjectsContext";
 import Project from "@models/Project";
 import { v4 as uuidv4 } from "uuid";
-import { ipcRenderer } from "electron";
+import { open as openDialog } from "@tauri-apps/api/dialog";
+import { getRemoteGitUrl } from "../tauriUtil";
 
 interface ProjectFormProps {
   onSubmit?: (newProject: Project) => void;
@@ -64,15 +65,18 @@ export default function ProjectForm({ onSubmit, project }: ProjectFormProps) {
   }
 
   async function selectDirectory() {
-    const selectedFiles: string[] | null = await ipcRenderer.invoke(
-      "openFileDialog"
-    );
-    if (!selectedFiles) {
-      return;
-    }
-    const [file] = selectedFiles;
+    const fromDialog = await openDialog({
+      title: "Select directory",
+      directory: true,
+      multiple: false,
+    });
+    console.log("fromDialog", fromDialog);
+
+    if (!fromDialog) return;
+
+    const file = fromDialog as string;
     form.setFieldValue("rootDir", file);
-    const url: string = await ipcRenderer.invoke("getRemoteGitUrl", file);
+    const url: string = await getRemoteGitUrl(file);
     if (url) {
       // pull the ".git" off the end of the url
       form.setFieldValue("url", url.slice(0, url.length - 4));

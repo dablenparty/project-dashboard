@@ -4,9 +4,10 @@ import ProjectListNavbar from "@components/ProjectListNavbar";
 import AppShellHeader from "@components/AppShellHeader";
 import ProjectPage from "@components/ProjectPage";
 import useLimitedArray from "@hooks/useLimitedArray";
-import { ipcRenderer } from "electron";
 import { useDidUpdate } from "@mantine/hooks";
 import Project from "@models/Project";
+import { readTextFile } from "@tauri-apps/api/fs";
+import { path } from "@tauri-apps/api";
 
 interface ReadmeCacheEntry {
   projectId: string;
@@ -34,13 +35,15 @@ function Content() {
       return;
     }
     // otherwise, fetch the README text from the folder
-    ipcRenderer.invoke("getReadme", selectedProject.rootDir).then((readme) => {
-      const readmeText = readme ?? undefined;
-      addReadmeCacheEntry({
-        projectId: selectedProject.id,
-        rawText: readmeText,
+    path.join(selectedProject.rootDir, "README.md").then((path) => {
+      readTextFile(path).then((readme) => {
+        const readmeText = readme ?? undefined;
+        addReadmeCacheEntry({
+          projectId: selectedProject.id,
+          rawText: readmeText,
+        });
+        setReadmeRaw(readmeText);
       });
-      setReadmeRaw(readmeText);
     });
   }, [selectedProject]);
 

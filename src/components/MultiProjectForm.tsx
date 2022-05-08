@@ -9,12 +9,13 @@ import {
 } from "@mantine/core";
 import { useForm, useListState } from "@mantine/hooks";
 import { Cross2Icon } from "@radix-ui/react-icons";
-import { ipcRenderer } from "electron";
 import { v4 as uuidv4 } from "uuid";
-import path from "path";
+import { path } from "@tauri-apps/api";
 import { useProjects } from "@context/ProjectsContext";
 import Project from "@models/Project";
 import { useEffect } from "react";
+import { open as openDialog } from "@tauri-apps/api/dialog";
+import { getRemoteGitUrl } from "../tauriUtil";
 
 interface BulkProject {
   name: string;
@@ -46,23 +47,30 @@ export default function MultiProjectForm({ onSubmit }: MultiProjectFormProps) {
 
   useEffect(() => {
     form.setValues({ projects: projects });
-  }, [projects, form]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [projects]);
 
   const selectDirectories = async () => {
-    const files: string[] | null = await ipcRenderer.invoke("openFileDialog", {
+    //! FIXME: create a custom Tauri command to allow for multiple directory selection
+    const fromDialog = await openDialog({
+      title: "Select directories",
+      directory: true,
       multiple: true,
     });
-    if (!files) {
+    if (!fromDialog) {
       return;
     }
-    const newProjects = files.map((file) => {
-      const basename = path.basename(file);
-      return {
-        name: basename,
-        description: basename,
-        rootDir: file,
-      };
-    });
+    const files = typeof fromDialog === "string" ? [fromDialog] : fromDialog;
+    const newProjects = await Promise.all(
+      files.map(async (file) => {
+        const basename = await path.basename(file);
+        return {
+          name: basename,
+          description: basename,
+          rootDir: file,
+        };
+      })
+    );
     projectsHandlers.setState(newProjects);
     form.setValues({ projects: newProjects });
   };
@@ -71,7 +79,7 @@ export default function MultiProjectForm({ onSubmit }: MultiProjectFormProps) {
     const newProjects: Project[] = await Promise.all(
       values.projects.map(async (project) => ({
         id: uuidv4(),
-        url: await ipcRenderer.invoke("getRemoteGitUrl", project.rootDir),
+        url: await getRemoteGitUrl(project.rootDir),
         ...project,
       }))
     );
