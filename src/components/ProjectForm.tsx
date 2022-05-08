@@ -70,7 +70,6 @@ export default function ProjectForm({ onSubmit, project }: ProjectFormProps) {
       directory: true,
       multiple: false,
     });
-    console.log("fromDialog", fromDialog);
 
     if (!fromDialog) return;
 
