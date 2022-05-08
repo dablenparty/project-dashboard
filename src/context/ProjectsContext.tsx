@@ -8,10 +8,10 @@ import {
   useState,
 } from "react";
 import Project from "@models/Project";
-import { ipcRenderer } from "electron";
 import { flushSync } from "react-dom";
 import { showNotification, updateNotification } from "@mantine/notifications";
 import { CheckIcon, Cross1Icon } from "@radix-ui/react-icons";
+import { loadProjects, saveProjects } from "../tauriUtil";
 
 const ProjectsContext = createContext<ProjectsContextProps | undefined>(
   undefined
@@ -52,8 +52,7 @@ export const ProjectsProvider = ({ children }: ProjectsProviderProps) => {
       disallowClose: true,
       loading: true,
     });
-    ipcRenderer
-      .invoke("loadProjects")
+    loadProjects()
       .then((projects: Project[]) => {
         if (isMounted) {
           // forces the component to re-render before changing the ref's value
@@ -107,8 +106,7 @@ export const ProjectsProvider = ({ children }: ProjectsProviderProps) => {
       disallowClose: true,
       loading: true,
     });
-    ipcRenderer
-      .invoke("saveProjects", projects)
+    saveProjects(projects)
       .then(() => {
         updateNotification({
           id: "projects-saving",
